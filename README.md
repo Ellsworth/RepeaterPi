@@ -1,5 +1,5 @@
 # RepeaterPi
-- Program to monitor sensors inside of a repeater cabinet and alert trustees when a argument is tripped
+- Project to monitor sensors inside of a repeater cabinet and alert trustees when a argument is tripped
 
 - [Link to source code](https://github.com/ellsworth/repeaterpi)
 
@@ -8,6 +8,7 @@
 - Using the existing Raspberry Pi reduces complexity, cost, and redundant hardware. The Pi also allows us to add features via updates to the software, requiring no modification to the sensor boards. Making it almost completely software defined.
 
 ----------
+
 
 # Sensors 
 
@@ -35,4 +36,4 @@
 		 - (CHANNEL_VOLTAGE/3.3v) = (VOLTAGE/MAX_VOLTAGE)
 			 - CHANNEL_VOLTAGE: The voltage read by the ADC
 			 - VOLTAGE: This is the voltage, the exact amount scaled up to the correct value.
-			 - MAX_VOLTAGE: The maximum power that will be read. YOU MUST STEP THIS DOWN TO 3.3V OR RISK DAMAGING THE MCP3008 ADC
+			 - MAX_VOLTAGE: The maximum power that will be read. YOU MUST STEP THIS DOWN TO 3.3V OR RISK DAMAGING THE MCP3008 

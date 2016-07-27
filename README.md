@@ -32,8 +32,11 @@
 ----------
 # Calculating Sensor Readout
 - Because these are not digital readouts, conversion from voltage is required.
-	 - The formula for the voltage sensor is as follows: 
+	 - The formula for the voltage sensor is as follows:
 		 - (CHANNEL_VOLTAGE/3.3v) = (VOLTAGE/MAX_VOLTAGE)
 			 - CHANNEL_VOLTAGE: The voltage read by the ADC
 			 - VOLTAGE: This is the voltage, the exact amount scaled up to the correct value.
-			 - MAX_VOLTAGE: The maximum power that will be read. YOU MUST STEP THIS DOWN TO 3.3V OR RISK DAMAGING THE MCP3008 
+			 - MAX_VOLTAGE: The maximum power that will be read. YOU MUST STEP THIS DOWN TO 3.3V OR RISK DAMAGING THE MCP3008
+		 - In the code it is:
+		    - (raw_sensor_CH1_voltage * raw_sensor_CH1_max_voltage) / 3.3
+		        - this will spit out the converted voltage

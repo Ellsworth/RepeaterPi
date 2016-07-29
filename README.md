@@ -18,14 +18,14 @@
 	 - This requires ALL sensors to have a maximum output voltage of 3.3v.
 	 - we have 8 pins on the ADC to work with; CH0, CH1, CH2, CH3, CH4, CH5, CH6, CH7
 		 - They are currently mapped as:
-			 - CH0: TMP36 temperature sensor
-			 - CH1: Voltage monitor; will be a maximum 16v input, stepped down to 3.3v to so the ADC can handle it safely
+			 - CH0: Voltage Probe 1, max power is 16v
+			 - CH1: Voltage Probe 2, max power is 16v
 			 - CH2: Unused
 			 - CH3: Unused
 			 - CH4: Unused
 			 - CH5: Unused
 			 - CH6: Unused
-			 - CH7: Unused
+			 - CH7: TMP36 Temp Sensor
 	 - Notice that we have extra channels available, so we could have up to 8 analog sensors, without using any extra GPIO pins on the Pi
 
 

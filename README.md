@@ -38,5 +38,5 @@
 			 - VOLTAGE: This is the voltage, the exact amount scaled up to the correct value.
 			 - MAX_VOLTAGE: The maximum power that will be read. YOU MUST STEP THIS DOWN TO 3.3V OR RISK DAMAGING THE MCP3008
 		 - In the code it is:
-		    - (raw_sensor_CH1_voltage * raw_sensor_CH1_max_voltage) / 3.3
+		    - (sensor_readout * 16) / 2.9
 		        - this will spit out the converted voltage

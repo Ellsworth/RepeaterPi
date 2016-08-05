@@ -28,7 +28,6 @@ def updateAdafruitIO():
     except:
         print("no internets :C")
 
-
 # while True:
 #    print(RepeaterPi.gen_Telemetry())
 #    updateAdafruitIO()
@@ -44,3 +43,4 @@ while True:
         main_power = new_main_power
         amplifier_power = new_amplifier_power
         updateAdafruitIO()
+    

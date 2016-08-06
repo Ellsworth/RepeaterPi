@@ -23,7 +23,11 @@ def scale_voltage(sensor_readout):
     return round((sensor_readout * 16) / 2.9, 2)
 
 def calc_temp(channel):
-    return (get_voltage(channel) * (9/5)) + 32  # converts C to F cause MURICA
+    temp = ((mcp.read_adc(channel) * 330)/float(1023))-50
+    temp = round(temp,1)
+    return temp
+ 
+    #return (get_voltage(channel) * (9/5)) + 32  # converts C to F cause MURICA
 
 #def gen_Telemetry():
 #    return ("-------------------------------------- \nTelemetry for " +
@@ -33,4 +37,5 @@ def calc_temp(channel):
 #          "v" + "\nTemperature: " + str(temp)) + " Degrees Fahrenheit" + "\n--------------------------------------"
 #
 #
+
 print(get_voltage(7))

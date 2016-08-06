@@ -24,8 +24,8 @@ def get_voltage(channel):
 def scale_voltage(sensor_readout):
     return round((sensor_readout * 16) / 2.9, 2)
 
-def calc_temp(data):
-    return (data * (9/5)) + 32  # converts C to F cause MURICA
+def calc_temp(channel):
+    return (get_voltage(channel) * (9/5)) + 32  # converts C to F cause MURICA
 
 def gen_Telemetry():
     return ("-------------------------------------- \nTelemetry for " +
@@ -36,3 +36,4 @@ def gen_Telemetry():
 
 
 print(get_voltage(7))
+print(calc_temp(7))

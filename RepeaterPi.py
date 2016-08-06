@@ -18,8 +18,10 @@ raw_sensor_CH0_voltage = 2.502
 raw_sensor_CH1_voltage = 2.9
 temp = 95
 
+def get_voltage(channel):
+    return (mcp.read_adc(channel) * 3.3) / 1023
 
-def calc_voltage(sensor_readout):
+def scale_voltage(sensor_readout):
     return round((sensor_readout * 16) / 2.9, 2)
 
 def calc_temp(data):
@@ -28,8 +30,8 @@ def calc_temp(data):
 def gen_Telemetry():
     return ("-------------------------------------- \nTelemetry for " +
           str(time.asctime(time.localtime(time.time()))) +
-          "\nPrimary: " + str(calc_voltage(raw_sensor_CH0_voltage)) +
-          "v Amplifier: " + str(calc_voltage(raw_sensor_CH1_voltage)) +
+          "\nPrimary: " + str(scale_voltage(raw_sensor_CH0_voltage)) +
+          "v Amplifier: " + str(scale_voltage(raw_sensor_CH1_voltage)) +
           "v" + "\nTemperature: " + str(temp)) + " Degrees Fahrenheit" + "\n--------------------------------------"
 
 

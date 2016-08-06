@@ -35,4 +35,4 @@ def gen_Telemetry():
           "v" + "\nTemperature: " + str(temp)) + " Degrees Fahrenheit" + "\n--------------------------------------"
 
 
-print(mcp.read_adc(7))
+print(get_voltage(7))

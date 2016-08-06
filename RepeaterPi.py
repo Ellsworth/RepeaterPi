@@ -1,7 +1,12 @@
 import configparser
-# mport spidev
+import Adafruit_GPIO.SPI as SPI
+import Adafruit_MCP3008
 import time
-# import os
+
+# Hardware SPI configuration:
+SPI_PORT   = 0
+SPI_DEVICE = 0
+mcp = Adafruit_MCP3008.MCP3008(spi=SPI.SpiDev(SPI_PORT, SPI_DEVICE))
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -28,4 +33,4 @@ def gen_Telemetry():
           "v" + "\nTemperature: " + str(temp)) + " Degrees Fahrenheit" + "\n--------------------------------------"
 
 
-print(gen_Telemetry())
+print(mcp.read_adc(7))

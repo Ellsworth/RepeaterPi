@@ -19,10 +19,10 @@ def get_voltage(channel):
 
 # nominal voltage should be 13.8v aka 2.502v as read directly by the ADC...
 def scale_voltage(sensor_readout):
-    return round((sensor_readout * 16) / 2.9, 2)
+    return float((sensor_readout * 16) / 2.9, 2)
 
 def calc_temp(channel):
-    return float(((((get_voltage(7) * 1000) - 500) / 10) * 9 / 5) + 32)
+    return float(((((get_voltage(7) * 1000) - 500) / 10) * 9 / 5) + 32, 0)
  
     #return (get_voltage(channel) * (9/5)) + 32  # converts C to F cause MURICA
 

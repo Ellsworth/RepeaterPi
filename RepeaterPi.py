@@ -15,7 +15,7 @@ print("RepeaterPi v.1 by KG5KEY on " + config['Basic']['repeater_name'])
 
 
 def get_voltage(channel):
-  returnmcp.read_adc(channel) * 3.3) / 1023
+  return (mcp.read_adc(channel) * 3.3) / 1023
 
 # nominal voltage should be 13.8v aka 2.502v as read directly by the ADC...
 def scale_voltage(sensor_readout):

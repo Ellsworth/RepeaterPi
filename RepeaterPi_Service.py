@@ -18,21 +18,17 @@ amplifier_power = 13.8
 
 def updateAdafruitIO():
     try:
-        aio.send(config['Basic']['repeater_location'] + '-temp', RepeaterPi.calc_temp(7))
+        aio.send(config['Basic']['repeater_location'] + '-temp', int(round(RepeaterPi.calc_temp(7), 0))
         aio.send(config['Basic']['repeater_location'] + '-main-power', main_power)
         aio.send(config['Basic']['repeater_location'] + '-amplifier-power', amplifier_power)
+        print("Updating AdafruitIO...")
+        print(RepeaterPi.gen_Telemetry())
     except:
         print("no internets :C")
 
-# while True:
-#    print(RepeaterPi.gen_Telemetry())
-#    updateAdafruitIO()
-#    sleep(300)
 
 updateAdafruitIO()
 
 while True:
-    sleep(300)
-    print('Updating AdafruitIO...')
+    sleep(5)
     updateAdafruitIO()
-    

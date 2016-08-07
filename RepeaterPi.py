@@ -24,7 +24,7 @@ def scale_voltage(sensor_readout):
 
 def calc_temp(channel):
     #return ((mcp.read_adc(channel) / 1023) * 150) * (9/5) + 32
-    return ((get_voltage(7) * 1000) - 500 / 10)
+    return round(((get_voltage(7) * 1000) - 500 / 10))
  
     #return (get_voltage(channel) * (9/5)) + 32  # converts C to F cause MURICA
 
@@ -34,3 +34,4 @@ def gen_Telemetry():
           "\nPrimary: " + str("0") +
           "v Amplifier: " + str(0) +
           "v" + "\nTemperature: " + str(calc_temp(7))) + " Degrees Fahrenheit" + "\n--------------------------------------"
+

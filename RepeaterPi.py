@@ -17,7 +17,7 @@ print("RepeaterPi v.1 by KG5KEY on " + config['Basic']['repeater_name'])
 
 
 def get_voltage(channel):
-    return (mcp.read_adc(channel) * 3.3) / 1023
+    return ((mcp.read_adc(channel) * 3.3) / 1023) / (.635 / .75)
 
 def scale_voltage(sensor_readout):
     return round((sensor_readout * 16) / 2.9, 2)
@@ -35,3 +35,5 @@ def gen_Telemetry():
           "v Amplifier: " + str(0) +
           "v" + "\nTemperature: " + str(calc_temp(7))) + " Degrees Fahrenheit" + "\n--------------------------------------"
 
+print(calc_temp(7))
+print(get_voltage(7))

@@ -1,3 +1,2 @@
 configparser
 Adafruit_IO
-spidev

@@ -22,7 +22,7 @@ def scale_voltage(sensor_readout):
     return round((sensor_readout * 16) / 2.9, 2)
 
 def calc_temp(channel):
-    return ((((get_voltage(7) * 1000) - 500) / 10) * 9 / 5) + 32
+    return float(((((get_voltage(7) * 1000) - 500) / 10) * 9 / 5) + 32)
  
     #return (get_voltage(channel) * (9/5)) + 32  # converts C to F cause MURICA
 
@@ -31,7 +31,4 @@ def gen_Telemetry():
           str(time.asctime(time.localtime(time.time()))) +
           "\nPrimary: " + str("0") +
           "v Amplifier: " + str(0) +
-          "v" + "\nTemperature: " + str(calc_temp(7))) + " Degrees Fahrenheit" + "\n--------------------------------------"
-
-print(calc_temp(7))
-print(get_voltage(7))
+          "v" + "\nTemperature: " + str(calc_temp(7)) + " Degrees Fahrenheit" + "\n--------------------------------------")

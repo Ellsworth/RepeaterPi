@@ -23,9 +23,8 @@ def scale_voltage(sensor_readout):
     return round((sensor_readout * 16) / 2.9, 2)
 
 def calc_temp(channel):
-    temp = ((mcp.read_adc(channel) * 330)/float(1023))-50
-    temp = round(temp,1)
-    return temp
+    ((mcp.read_adc(channel) / 1023) * 150) * (9/5)) + 32
+    
  
     #return (get_voltage(channel) * (9/5)) + 32  # converts C to F cause MURICA
 

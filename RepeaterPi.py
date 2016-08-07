@@ -34,3 +34,5 @@ def gen_Telemetry():
           "v" + "\nTemperature: " + str(calc_temp(7)) + " Degrees Fahrenheit" + "\n--------------------------------------")
 
 
+print(gen_Telemetry())
+print(get_voltage(7))

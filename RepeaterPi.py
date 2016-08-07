@@ -46,7 +46,7 @@ def ConvertVolts(data):
 # Function to calculate temperature from
 # TMP36 data, rounded to specified
 # number of decimal places.
-def ConvertTemp(data,places):
+def ConvertTemp(data):
  
   # ADC Value
   # (approx)  Temp  Volts
@@ -61,5 +61,6 @@ def ConvertTemp(data,places):
  
   temp = ((data * 330)/float(1023))-50
   return temp
-  
- 
+
+print(ConvertTemp(ConvertVolts(mcp.read_adc(7))))
+print(calc_temp(7))

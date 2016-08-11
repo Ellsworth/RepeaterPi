@@ -19,8 +19,8 @@ amplifier_power = 13.8
 def updateAdafruitIO():
     try:
         aio.send(config['Basic']['repeater_location'] + '-temp', RepeaterPi.calc_temp(7))
-        aio.send(config['Basic']['repeater_location'] + '-main-power', scale_voltage(0))
-        aio.send(config['Basic']['repeater_location'] + '-amplifier-power', scale_voltage(1))
+        aio.send(config['Basic']['repeater_location'] + '-main-power', RepeaterPi.scale_voltage(0))
+        aio.send(config['Basic']['repeater_location'] + '-amplifier-power', RepeaterPi.scale_voltage(1))
         print("Updating AdafruitIO...")
         print(RepeaterPi.gen_Telemetry())
     except:

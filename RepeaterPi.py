@@ -27,7 +27,7 @@ def calc_temp(channel):
 def gen_Telemetry():
     return ("-------------------------------------- \nTelemetry for " +
           str(time.asctime(time.localtime(time.time()))) +
-          "\nPrimary: " + str(scale_voltage()) +
-          "v Amplifier: " + str(0) +
+          "\nPrimary: " + str(scale_voltage(0)) +
+          "v Amplifier: " + str(scale_voltage(1)) +
           "v" + "\nTemperature: " + str(calc_temp(7)) + " Degrees Fahrenheit" + "\n--------------------------------------")
 

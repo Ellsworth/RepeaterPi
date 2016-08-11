@@ -10,10 +10,6 @@ config.read('config.ini')
 
 aio = Client(config['AdafruitIO']['AIO_Key'])
 
-main_power = 13.8
-amplifier_power = 13.8
-
-
 
 
 def updateAdafruitIO():
@@ -27,8 +23,7 @@ def updateAdafruitIO():
         print("no internets :C")
 
 
-updateAdafruitIO()
-
 while True:
-    sleep(300)
     updateAdafruitIO()
+    sleep(300)
+

@@ -4,6 +4,11 @@ import Adafruit_MCP3008
 import time
 from Adafruit_IO import Client
 
+# setting up vars
+temp = 0
+main_power = 0
+amp_power = 0
+
 # Hardware SPI configuration:
 mcp = Adafruit_MCP3008.MCP3008(spi=SPI.SpiDev(0, 0))
 
@@ -29,6 +34,11 @@ def scale_voltage(channel):
 
 def calc_temp(channel):
     return round(((((get_voltage(7) * 1000) - 500) / 10)) * 9 / 5 + 32, 1)
+
+def update_sensors():
+    temp = calc_temp(7)
+    main_power = scale_voltage(0)
+    amp_power = scale_voltage(1)
  
 def gen_Telemetry():
     return ("-------------------------------------- \nTelemetry for " +
@@ -38,9 +48,9 @@ def gen_Telemetry():
           "v" + "\nTemperature: " + str(calc_temp(7)) + " Degrees Fahrenheit" + "\n--------------------------------------")
 
 def updateAdafruitIO():
-    aio.send(config['Basic']['repeater_location'] + '-temp', calc_temp(7))
-    aio.send(config['Basic']['repeater_location'] + '-main-power', scale_voltage(0))
-    aio.send(config['Basic']['repeater_location'] + '-amplifier-power', scale_voltage(1))
+    aio.send(config['Basic']['repeater_location'] + '-temp', temp)
+    aio.send(config['Basic']['repeater_location'] + '-main-power', main_power)
+    aio.send(config['Basic']['repeater_location'] + '-amplifier-power', amp_power)
     print("Updating AdafruitIO...")
     print(gen_Telemetry())
 
@@ -48,5 +58,6 @@ def updateAdafruitIO():
 print("\nStarting RepeaterPi service...")
 
 while True:
+    update_sensors()
     updateAdafruitIO()
     time.sleep(300)

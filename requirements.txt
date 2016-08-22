@@ -1,3 +1,5 @@
 configparser
-Adafruit_IO
 Adafruit_GPIO
+Adafruit_MCP3008
+time
+Adafruit_IO

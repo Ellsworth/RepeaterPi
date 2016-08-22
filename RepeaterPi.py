@@ -1,11 +1,11 @@
 import configparser
-import Adafruit_GPIO.SPI as SPI
+import Adafruit_GPIO.SPI
 import Adafruit_MCP3008
 import time
 from Adafruit_IO import Client
 
 # Hardware SPI configuration:
-mcp = Adafruit_MCP3008.MCP3008(spi=SPI.SpiDev(0, 0))
+mcp = Adafruit_MCP3008.MCP3008(spi=Adafruit_GPIO.SPI.SpiDev(0, 0))
 
 # Config configuration
 config = configparser.ConfigParser()

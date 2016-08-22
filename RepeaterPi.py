@@ -21,7 +21,11 @@ def get_voltage(channel):
 
 # nominal voltage should be 13.8v aka 2.502v as read directly by the ADC...
 def scale_voltage(channel):
-    return round(((get_voltage(channel) * 16) / 2.9), 2)
+    voltage = round(((get_voltage(channel) * 16) / 2.9), 2)
+    if (voltage < 1):
+        voltage = 0
+    else:
+        return voltage
 
 def calc_temp(channel):
     return round(((((get_voltage(7) * 1000) - 500) / 10)) * 9 / 5 + 32, 1)

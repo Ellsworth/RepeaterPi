@@ -43,8 +43,8 @@ def calc_temp(channel):
 
 def updateAdafruitIO():
     aio.send(repeater_location + '-temp', calc_temp(7))
-    aio.send(repeater_location + '-main-power', (scale_voltage(0) * main_cal))
-    aio.send(repeater_location + '-amplifier-power', (scale_voltage(1) * amplifier_cal))
+    aio.send(repeater_location + '-main-power', (scale_voltage(0) * float(main_cal)))
+    aio.send(repeater_location + '-amplifier-power', (scale_voltage(1) * float(amplifier_cal)))
     print("[" + str(time.asctime(time.localtime(time.time()))) + "] Updating AdafruitIO...")
 
 
@@ -53,4 +53,6 @@ print("\nStarting RepeaterPi service...")
 while True:
     updateAdafruitIO()
     time.sleep(300)
+
+print(scale_voltage(1) * float(amplifier_cal))
 

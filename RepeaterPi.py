@@ -17,10 +17,6 @@ amplifier_cal = config['Basic']['amplifier_cal']
 
 print("RepeaterPi v.1 by KG5KEY on " + repeater_location)
 
-# don't mess with this please
-temp = 0.0
-main_power = 0.0
-amplifier_power = 0.0
 
 # defining core funtions
 def get_voltage(channel):
@@ -37,6 +33,11 @@ def scale_voltage(channel):
 def calc_temp(channel):
     return round(((((get_voltage(7) * 1000) - 500) / 10)) * 9 / 5 + 32, 1) # I actually understand this, unlike scale_voltage()
  
+
+temp = calc_temp(7)
+main_power = float(scale_voltage(0)) * float(main_cal)
+amplifier_power = float(scale_voltage(1)) * float(amplifier_cal)
+    
 def gen_Telemetry():
     return ("-------------------------------------- \nTelemetry for " +
           str(time.asctime(time.localtime(time.time()))) +
@@ -45,9 +46,6 @@ def gen_Telemetry():
           "v" + "\nTemperature: " + str(temp) + " Degrees Fahrenheit" + "\n--------------------------------------")
 
 def updateAdafruitIO():
-    temp = calc_temp(7)
-    main_power = float(scale_voltage(0)) * float(main_cal)
-    amplifier_power = float(scale_voltage(1)) * float(amplifier_cal)
     aio.send(repeater_location + '-temp', temp)
     aio.send(repeater_location + '-main-power', main_power)
     aio.send(repeater_location + '-amplifier-power', amplifier_power)
@@ -59,4 +57,7 @@ print("\nStarting RepeaterPi service...")
 while True:
     updateAdafruitIO()
     time.sleep(300)
+    temp = calc_temp(7)
+    main_power = float(scale_voltage(0)) * float(main_cal)
+    amplifier_power = float(scale_voltage(1)) * float(amplifier_cal)
 

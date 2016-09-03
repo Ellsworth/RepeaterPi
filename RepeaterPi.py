@@ -56,7 +56,7 @@ def updateAdafruitIO(temp, main_power, amplifier_power):
 print("\nStarting RepeaterPi service...")
 
 while True:
-    updateAdafruitIO(temp, main_power, amplifier_power)
+    updateAdafruitIO()
     time.sleep(300)
     temp = float(format(calc_temp, '.1f'))
     main_power = float(format(scale_voltage(0) * float(main_cal), '.1f'))

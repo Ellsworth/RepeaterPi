@@ -14,6 +14,9 @@ aio = Client(config['AdafruitIO']['AIO_Key'])
 repeater_location = config['Basic']['repeater_name']
 main_cal = config['Basic']['main_cal']
 amplifier_cal = config['Basic']['amplifier_cal']
+main_power = 0.0
+amplifier_power = 0.0
+temp = 0.0
 
 print("RepeaterPi v.1 by KG5KEY on " + repeater_location)
 
@@ -33,11 +36,10 @@ def scale_voltage(channel):
 def calc_temp(channel):
     return float(((((get_voltage(7) * 1000) - 500) / 10)) * 9 / 5 + 32) # I actually understand this, unlike scale_voltage()
  
-
-temp = round(calc_temp(7), 2)
-main_power = float(round(scale_voltage(0) * float(amplifier_cal, 2))
-amplifier_power = float(round(scale_voltage(1) * amplifier_cal, 2))
-
+def updateSensors():
+    temp = round(calc_temp(7), 2)
+    main_power = round(float(scale_voltage(0)) * float(main_cal), 2)
+    amplifier_power = round(float(scale_voltage(1)) * float(amplifier_cal), 2)
 
     
 def gen_Telemetry():
@@ -57,8 +59,7 @@ def updateAdafruitIO():
 print("\nStarting RepeaterPi service...")
 
 while True:
+    updateSensors()
     updateAdafruitIO()
     time.sleep(300)
-    temp = round(calc_temp(7), 2)
-    main_power = float(round(scale_voltage(0) * amplifier_cal, 2))
-    amplifier_power = float(round(scale_voltage(1) * (amplifier_cal, 2)))
+

@@ -34,12 +34,12 @@ def calc_temp(channel):
     return round(((((get_voltage(7) * 1000) - 500) / 10)) * 9 / 5 + 32, 1) # I actually understand this, unlike scale_voltage()
 
  
-def gen_Telemetry():
-    return ("-------------------------------------- \nTelemetry for " +
-          str(time.asctime(time.localtime(time.time()))) +
-          "\nPrimary: " + str(scale_voltage(0)) +
-          "v Amplifier: " + str(scale_voltage(1)) +
-          "v" + "\nTemperature: " + str(calc_temp(7)) + " Degrees Fahrenheit" + "\n--------------------------------------")
+# def gen_Telemetry():
+#    return ("-------------------------------------- \nTelemetry for " +
+#          str(time.asctime(time.localtime(time.time()))) +
+#          "\nPrimary: " + str(scale_voltage(0)) +
+#          "v Amplifier: " + str(scale_voltage(1)) +
+#          "v" + "\nTemperature: " + str(calc_temp(7)) + " Degrees Fahrenheit" + "\n--------------------------------------")
 
 def updateAdafruitIO():
     aio.send(repeater_location + '-temp', calc_temp(7))

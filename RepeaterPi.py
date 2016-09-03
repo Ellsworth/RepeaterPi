@@ -47,7 +47,7 @@ def gen_Telemetry():
 def updateAdafruitIO():
     temp = calc_temp(7)
     main_power = float(scale_voltage(0)) * float(main_cal)
-    amplifier_power = float(scale_voltage(1)) * float(main_cal)
+    amplifier_power = float(scale_voltage(1)) * float(amplifier_cal)
     aio.send(repeater_location + '-temp', temp)
     aio.send(repeater_location + '-main-power', main_power)
     aio.send(repeater_location + '-amplifier-power', amplifier_power)

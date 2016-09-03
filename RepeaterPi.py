@@ -9,7 +9,7 @@ mcp = Adafruit_MCP3008.MCP3008(spi=Adafruit_GPIO.SPI.SpiDev(0, 0))
 
 # Config configuration
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('/root/RepeaterPi//config.ini')
 aio = Client(config['AdafruitIO']['AIO_Key'])
 
 print("RepeaterPi v.1 by KG5KEY on " + config['Basic']['repeater_name'])
@@ -21,7 +21,7 @@ def get_voltage(channel):
 
 # nominal voltage should be 13.8v aka 2.502v as read directly by the ADC...
 def scale_voltage(channel):
-    voltage = round(((get_voltage(channel) * 16) / 2.9), 2)
+    voltage = round(((get_voltage(channel) * 16) / 2.615), 2)
     if (voltage < 1):
         voltage = 0
     else:

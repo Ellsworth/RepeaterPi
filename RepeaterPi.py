@@ -51,7 +51,7 @@ def updateAdafruitIO():
     aio.send(repeater_location + '-temp', temp)
     aio.send(repeater_location + '-main-power', main_power)
     aio.send(repeater_location + '-amplifier-power', amplifier_power)
-    print("[" + str(time.asctime(time.localtime(time.time()))) + "] Updating AdafruitIO...")
+    print(gen_Telemetry())
 
 
 print("\nStarting RepeaterPi service...")

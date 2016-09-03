@@ -34,9 +34,9 @@ def calc_temp(channel):
     return float(((((get_voltage(7) * 1000) - 500) / 10)) * 9 / 5 + 32) # I actually understand this, unlike scale_voltage()
  
 
-temp = float(calc_temp)
+temp = round(calc_temp, 2)
 main_power = round(scale_voltage(0) * amplifier_cal, 2)
-amplifier_power = round(scale_voltage(1) * (amplifier_cal, 2))
+amplifier_power = round(scale_voltage(1) * amplifier_cal, 2)
 
 
     
@@ -59,6 +59,6 @@ print("\nStarting RepeaterPi service...")
 while True:
     updateAdafruitIO()
     time.sleep(300)
-    temp = float(calc_temp)
+    temp = round(calc_temp, 2)
     main_power = round(scale_voltage(0) * amplifier_cal, 2)
     amplifier_power = round(scale_voltage(1) * (amplifier_cal, 2))

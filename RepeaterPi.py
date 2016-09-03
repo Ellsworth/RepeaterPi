@@ -32,6 +32,12 @@ def scale_voltage(channel):
 
 def calc_temp(channel):
     return float(((((get_voltage(7) * 1000) - 500) / 10)) * 9 / 5 + 32) # I actually understand this, unlike scale_voltage()
+ 
+
+temp = float(format(calc_temp, '.1f'))
+main_power = float(format(scale_voltage(0) * float(main_cal), '.1f'))
+amplifier_power = float(format(scale_voltage(1) * float(main_cal), '.1f'))
+
     
 def gen_Telemetry():
     return ("-------------------------------------- \nTelemetry for " +
@@ -53,5 +59,5 @@ while True:
     updateAdafruitIO(temp, main_power, amplifier_power)
     time.sleep(300)
     temp = float(format(calc_temp, '.1f'))
-    main_power = float(format(scale_voltage(0) * float(main_cal), '.01f'))
+    main_power = float(format(scale_voltage(0) * float(main_cal), '.1f'))
     amplifier_power = float(format(scale_voltage(1) * float(main_cal), '.1f'))

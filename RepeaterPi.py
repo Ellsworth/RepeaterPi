@@ -35,8 +35,9 @@ def calc_temp(channel):
  
 
 temp = float(calc_temp)
-main_power = round(scale_voltage(0) * float(main_cal), 2)
-amplifier_power = round(scale_voltage(1) * float(main_cal), 2)
+main_power = round(scale_voltage(0) * amplifier_cal, 2)
+amplifier_power = round(scale_voltage(1) * (amplifier_cal, 2))
+
 
     
 def gen_Telemetry():
@@ -56,9 +57,8 @@ def updateAdafruitIO():
 print("\nStarting RepeaterPi service...")
 
 while True:
-    print(str(temp)) + " " + str(main_power) + " " str(amplifier_power))
     updateAdafruitIO()
     time.sleep(300)
     temp = float(calc_temp)
-    main_power = round(scale_voltage(0) * float(main_cal), 2)
-    amplifier_power = round(scale_voltage(1) * float(main_cal), 2)
+    main_power = round(scale_voltage(0) * amplifier_cal, 2)
+    amplifier_power = round(scale_voltage(1) * (amplifier_cal, 2))

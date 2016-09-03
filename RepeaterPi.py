@@ -45,7 +45,7 @@ def gen_Telemetry():
           "v Amplifier: " + str(amplifier_power) +
           "v" + "\nTemperature: " + str(temp) + " Degrees Fahrenheit" + "\n--------------------------------------")
 
-def updateAdafruitIO():
+def updateAdafruitIO(temp, main_power, amplifier_power):
     aio.send(repeater_location + '-temp', temp)
     aio.send(repeater_location + '-main-power', main_power)
     aio.send(repeater_location + '-amplifier-power', amplifier_power)
@@ -55,7 +55,7 @@ def updateAdafruitIO():
 print("\nStarting RepeaterPi service...")
 
 while True:
-    updateAdafruitIO()
+    updateAdafruitIO(temp, main_power, amplifier_power)
     time.sleep(300)
     temp = calc_temp(7)
     main_power = float(scale_voltage(0)) * float(main_cal)

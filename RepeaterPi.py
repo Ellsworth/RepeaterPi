@@ -46,7 +46,7 @@ def gen_Telemetry():
           "v Amplifier: " + str(amplifier_power) +
           "v" + "\nTemperature: " + str(temp) + " Degrees Fahrenheit" + "\n--------------------------------------")
 
-def updateAdafruitIO(temp, main_power, amplifier_power):
+def updateAdafruitIO():
     aio.send(repeater_location + '-temp', temp)
     aio.send(repeater_location + '-main-power', main_power)
     aio.send(repeater_location + '-amplifier-power', amplifier_power)
@@ -59,5 +59,5 @@ while True:
     updateAdafruitIO()
     time.sleep(300)
     temp = float(format(calc_temp, '.1f'))
-    main_power = float(format(scale_voltage(0) * float(main_cal), '.1f'))
+    main_power = float(format((scale_voltage(0) * float(main_cal)), '.1f'))
     amplifier_power = float(format(scale_voltage(1) * float(main_cal), '.1f'))

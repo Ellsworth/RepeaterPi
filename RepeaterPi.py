@@ -39,18 +39,18 @@ main_power = (round(float(scale_voltage(0)) * float(main_cal), 2))
 amplifier_power = (round(float(scale_voltage(1)) * float(main_cal), 2))
 
 
-#def gen_Telemetry():
-#    return ("-------------------------------------- \nTelemetry for " +
-#          str(time.asctime(time.localtime(time.time()))) +
-#          "\nPrimary: " + str(main_power) +
-#          "v Amplifier: " + str(amplifier_power) +
-#          "v" + "\nTemperature: " + str(temp) + " Degrees Fahrenheit" + "\n--------------------------------------")
+def gen_Telemetry():
+    return ("-------------------------------------- \nTelemetry for " +
+          str(time.asctime(time.localtime(time.time()))) +
+          "\nPrimary: " + str(main_power) +
+          "v Amplifier: " + str(amplifier_power) +
+          "v" + "\nTemperature: " + str(temp) + " Degrees Fahrenheit\n")
 
 def updateAdafruitIO():
     aio.send(repeater_location + '-temp', temp)
     aio.send(repeater_location + '-main-power', main_power)
     aio.send(repeater_location + '-amplifier-power', amplifier_power)
-    print("Updating adafruit IO feeds: " + repeater_location + '-temp, ' + repeater_location + '-main-power, ' + repeater_location + '-amplifier-power', amplifier_power)
+    
 
 
 print("\nStarting RepeaterPi service...")

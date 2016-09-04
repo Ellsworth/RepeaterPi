@@ -47,9 +47,9 @@ def calc_temp(channel):
 #          "v" + "\nTemperature: " + str(temp) + " Degrees Fahrenheit" + "\n--------------------------------------")
 
 def updateAdafruitIO():
-    aio.send(repeater_location + '-temp', round(calc_temp(7), 2))
-    aio.send(repeater_location + '-main-power', round(float(scale_voltage(0)) * float(main_cal), 2))
-    aio.send(repeater_location + '-amplifier-power', round(float(scale_voltage(1)) * float(amplifier_cal), 2))
+    aio.send(repeater_location + '-temp', (round(calc_temp(7), 2)))
+    aio.send(repeater_location + '-main-power', (round(float(scale_voltage(0)) * float(main_cal), 2)))
+    aio.send(repeater_location + '-amplifier-power', (round(float(scale_voltage(1)) * float(amplifier_cal), 2)))
     print("Updating adafruit IO")
 
 

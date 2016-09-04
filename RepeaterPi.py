@@ -11,11 +11,11 @@ mcp = Adafruit_MCP3008.MCP3008(spi=Adafruit_GPIO.SPI.SpiDev(0, 0))
 config = configparser.ConfigParser()
 config.read('/root/RepeaterPi/config.ini')
 aio = Client(config['AdafruitIO']['AIO_Key'])
-repeater_location = config['Basic']['repeater_name']
+repeater_location = config['Basic']['repeater_location']
 main_cal = config['Basic']['main_cal']
 amplifier_cal = config['Basic']['amplifier_cal']
 
-print("RepeaterPi v.1 by KG5KEY on " + repeater_location)
+print("RepeaterPi v.1 by KG5KEY on " + config['Basic']['repeater_name'])
 
 
 # defining core funtions

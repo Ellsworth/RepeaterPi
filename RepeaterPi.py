@@ -34,9 +34,9 @@ def calc_temp(channel):
     return float(((((get_voltage(7) * 1000) - 500) / 10)) * 9 / 5 + 32) # I actually understand this, unlike scale_voltage()
  
 
-#temp = round(calc_temp(7), 2)
-#main_power = round(float(scale_voltage(0)) * float(main_cal), 2)
-#amplifier_power = round(float(scale_voltage(1)) * float(amplifier_cal), 2)
+temp = (round(calc_temp(7), 2))
+main_power = (round(float(scale_voltage(0)) * float(main_cal), 2))
+amplifier_power = (round(float(scale_voltage(1)) * float(main_cal), 2))
 
 
 #def gen_Telemetry():
@@ -47,18 +47,18 @@ def calc_temp(channel):
 #          "v" + "\nTemperature: " + str(temp) + " Degrees Fahrenheit" + "\n--------------------------------------")
 
 def updateAdafruitIO():
-    aio.send(repeater_location + '-temp', (round(calc_temp(7), 2)))
-    aio.send(repeater_location + '-main-power', (round(float(scale_voltage(0)) * float(main_cal), 2)))
-    aio.send(repeater_location + '-amplifier-power', (round(float(scale_voltage(1)) * float(amplifier_cal), 2)))
-    print("Updating adafruit IO")
+    aio.send(repeater_location + '-temp', temp)
+    aio.send(repeater_location + '-main-power', main_power)
+    aio.send(repeater_location + '-amplifier-power', amplifier_power)
+    print("Updating adafruit IO feeds: " + repeater_location + '-temp, ' + repeater_location + '-main-power, ' + repeater_location + '-amplifier-power', amplifier_power)
 
 
 print("\nStarting RepeaterPi service...")
 
 while True:
-    #temp = round(calc_temp(7), 2)
-    #main_power = round(float(scale_voltage(0)) * float(main_cal), 2)
-    #amplifier_power = round(float(scale_voltage(1)) * float(amplifier_cal), 2)
+    temp = (round(calc_temp(7), 2))
+    main_power = (round(float(scale_voltage(0)) * float(main_cal), 2))
+    amplifier_power = (round(float(scale_voltage(1)) * float(main_cal), 2))
     updateAdafruitIO()
-    #aio.send(repeater_location + '-temp', 80)
+
     time.sleep(300)

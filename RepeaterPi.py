@@ -28,11 +28,11 @@ def get_voltage(channel):
 
 # nominal voltage should be 13.8v aka 2.502v as read directly by the ADC...
 def scale_voltage(channel):
-    voltage = ((get_voltage(channel) * 16) / 2.615) # not sure why this works... but it does so im going to let it be
-    if (voltage < 1):
-        voltage = 0.0
+    voltage = ((get_voltage(channel) * 16) / 2.61) # not sure why this works... but it does so im going to let it be
+    if voltage < 1:
+        return 0.0
     else:
-        return voltage
+        return float(voltage)
 
 def calc_temp(channel):
     return float(((((get_voltage(7) * 1000) - 500) / 10)) * 9 / 5 + 32) # I actually understand this, unlike scale_voltage()
@@ -60,6 +60,9 @@ def updateAdafruitIO():
 print("\nStarting RepeaterPi service...")
 
 while True:
+    temp = round(calc_temp(7), 2)
+    main_power = round(float(scale_voltage(0)) * float(main_cal), 2)
+    amplifier_power = round(float(scale_voltage(1)) * float(amplifier_cal), 2)
     #updateSensors()
     updateAdafruitIO()
     time.sleep(300)

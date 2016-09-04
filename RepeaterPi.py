@@ -60,4 +60,5 @@ while True:
     main_power = round(float(scale_voltage(0)) * float(main_cal), 2)
     amplifier_power = round(float(scale_voltage(1)) * float(amplifier_cal), 2)
     updateAdafruitIO()
+    aio.send(repeater_location + '-temp', 80)
     time.sleep(300)

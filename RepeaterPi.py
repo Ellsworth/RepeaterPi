@@ -15,11 +15,12 @@ repeater_location = config['Basic']['repeater_location']
 main_cal = config['Basic']['main_cal']
 amplifier_cal = config['Basic']['amplifier_cal']
 
-print("RepeaterPi v.1 by KG5KEY on " + config['Basic']['repeater_name'])
+print("RepeaterPi 1.0v by KG5KEY on " + config['Basic']['repeater_name'])
 
 
 # defining core funtions
 def get_voltage(channel):
+    # Need to look at this more, still a bit of a mess.
     return (mcp.read_adc(channel) * 3.3) / float(1023)
     #return ( * float(3.1)) / 1023
 
@@ -31,11 +32,12 @@ def scale_voltage(channel):
         return float(voltage)
 
 def calc_temp(channel):
-    # this is a mess, what was i thinking, it works FB though...
+    # this is a mess, what was i thinking? It works FB though...
     return float(((((get_voltage(7) * 1000) - 500) / 10)) * 9 / 5 + 32)
 
  
 # don't mind me, just taking my vars for a walk...
+newtemp = 81
 temp = 0
 main_power = 0
 amplifier_power = 0
@@ -58,7 +60,10 @@ def updateAdafruitIO():
 print("\nStarting RepeaterPi service...")
 
 while True:
+    
     temp = (round(calc_temp(7), 2))
+    if temp < 70:
+        temp = 78
     main_power = (round(float(scale_voltage(0)) * float(main_cal), 2))
     amplifier_power = (round(float(scale_voltage(1)) * float(amplifier_cal), 2))
 

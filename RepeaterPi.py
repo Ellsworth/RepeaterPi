@@ -4,34 +4,33 @@ import Adafruit_MCP3008
 import time
 from Adafruit_IO import Client
 
-# Hardware SPI configuration:
+# Hardwa re SPI configuration:
 mcp = Adafruit_MCP3008.MCP3008(spi=Adafruit_GPIO.SPI.SpiDev(0, 0))
 
-# Config configuration
+# Config reading, dont ask please.
 config = configparser.ConfigParser()
 config.read('/root/RepeaterPi/config.ini')
 aio = Client(config['AdafruitIO']['AIO_Key'])
 repeater_location = config['Basic']['repeater_location']
 main_cal = config['Basic']['main_cal']
 amplifier_cal = config['Basic']['amplifier_cal']
-voltage33 = config['Basic']['repeater_name']
 
 print("RepeaterPi v.1 by KG5KEY on " + config['Basic']['repeater_name'])
 
 
 # defining core funtions
 def get_voltage(channel):
-  return (mcp.read_adc(channel) * float(voltage33)) / 1023
+  return (mcp.read_adc(channel) * float(3.3)) / 1023
 
 def scale_voltage(channel):
-    voltage = ((get_voltage(channel) * 16) / float(voltage33)) 
+    voltage = ((get_voltage(channel) * 16) / float(3.3))
     if voltage < 1:
         return 0.0
     else:
         return float(voltage)
 
 def calc_temp(channel):
-    # this is a mess, what was i thinking> it works FB though...
+    # this is a mess, what was i thinking, it works FB though...
     return float(((((get_voltage(7) * 1000) - 500) / 10)) * 9 / 5 + 32)
 
  

@@ -34,9 +34,9 @@ def calc_temp(channel):
     return float(((((get_voltage(7) * 1000) - 500) / 10)) * 9 / 5 + 32) # I actually understand this, unlike scale_voltage()
  
 
-temp = (round(calc_temp(7), 2))
-main_power = (round(float(scale_voltage(0)) * float(main_cal), 2))
-amplifier_power = (round(float(scale_voltage(1)) * float(main_cal), 2))
+temp = 0
+main_power = 0
+amplifier_power = 0
 
 
 def gen_Telemetry():

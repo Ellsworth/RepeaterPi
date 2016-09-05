@@ -20,7 +20,8 @@ print("RepeaterPi v.1 by KG5KEY on " + config['Basic']['repeater_name'])
 
 # defining core funtions
 def get_voltage(channel):
-  return (mcp.read_adc(channel) * float(3.1)) / 1023
+    return (mcp.read_adc(channel) * 3.3) / float(1023)
+    #return ( * float(3.1)) / 1023
 
 def scale_voltage(channel):
     voltage = ((get_voltage(channel) * 16) / float(3.3))

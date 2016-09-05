@@ -14,26 +14,28 @@ aio = Client(config['AdafruitIO']['AIO_Key'])
 repeater_location = config['Basic']['repeater_location']
 main_cal = config['Basic']['main_cal']
 amplifier_cal = config['Basic']['amplifier_cal']
+voltage33 = config['Basic']['repeater_name']
 
 print("RepeaterPi v.1 by KG5KEY on " + config['Basic']['repeater_name'])
 
 
 # defining core funtions
 def get_voltage(channel):
-  return (mcp.read_adc(channel) * float(config['Basic']['voltage33'])) / 1023
+  return (mcp.read_adc(channel) * float(voltage33)) / 1023
 
-# nominal voltage should be 13.8v aka 2.502v as read directly by the ADC...
 def scale_voltage(channel):
-    voltage = ((get_voltage(channel) * 16) / 3.25) # not sure why this works... but it does so im going to let it be
+    voltage = ((get_voltage(channel) * 16) / float(voltage33)) 
     if voltage < 1:
         return 0.0
     else:
         return float(voltage)
 
 def calc_temp(channel):
-    return float(((((get_voltage(7) * 1000) - 500) / 10)) * 9 / 5 + 32) # I actually understand this, unlike scale_voltage()
- 
+    # this is a mess, what was i thinking> it works FB though...
+    return float(((((get_voltage(7) * 1000) - 500) / 10)) * 9 / 5 + 32)
 
+ 
+# don't mind me, just taking my vars for a walk...
 temp = 0
 main_power = 0
 amplifier_power = 0

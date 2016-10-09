@@ -15,6 +15,11 @@ repeater_location = config['Basic']['repeater_location']
 main_cal = config['Basic']['main_cal']
 amplifier_cal = config['Basic']['amplifier_cal']
 
+temp = 0
+old_temp = 0
+main_power = 0
+amplifier_power = 0
+
 print("RepeaterPi 1.2v by KG5KEY on " + config['Basic']['repeater_name'])
 
 
@@ -32,10 +37,6 @@ def scale_voltage(channel):
 def calc_temp(channel):
     return float(((((get_voltage(7) * 1000) - 500) / 10)) * 9 / 5 + 32)
 
-temp = 0
-old_temp = 0
-main_power = 0
-amplifier_power = 0
 
 
 def gen_Telemetry():

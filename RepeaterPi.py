@@ -55,20 +55,24 @@ def updateAdafruitIO():
 def isValid(current, previous):
     return abs(((current - previous) / previous) * 100) < 8
 
-def updateSensors():
-    temp = (round(calc_temp(7), 2))
-    main_power = (round(float(scale_voltage(0)) * float(main_cal), 2))
-    amplifier_power = (round(float(scale_voltage(1)) * float(amplifier_cal), 2))
+#def updateSensors():
+#    temp = (round(calc_temp(7), 2))
+#    main_power = (round(float(scale_voltage(0)) * float(main_cal), 2))
+#    amplifier_power = (round(float(scale_voltage(1)) * float(amplifier_cal), 2))
 
 
 print("\nStarting RepeaterPi service...")
 
 while True:
-    updateSensors()
+    temp = (round(calc_temp(7), 2))
+    main_power = (round(float(scale_voltage(0)) * float(main_cal), 2))
+    amplifier_power = (round(float(scale_voltage(1)) * float(amplifier_cal), 2))
     if isValid(temp, old_temp) == True:
         updateAdafruitIO()
     else:
-        updateSensors()
+        temp = (round(calc_temp(7), 2))
+        main_power = (round(float(scale_voltage(0)) * float(main_cal), 2))
+        amplifier_power = (round(float(scale_voltage(1)) * float(amplifier_cal), 2))
         updateAdafruitIO()
     old_temp = temp
     time.sleep(300)

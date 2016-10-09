@@ -15,7 +15,7 @@ repeater_location = config['Basic']['repeater_location']
 main_cal = config['Basic']['main_cal']
 amplifier_cal = config['Basic']['amplifier_cal']
 
-print("RepeaterPi 1.1v by KG5KEY on " + config['Basic']['repeater_name'])
+print("RepeaterPi 1.2v by KG5KEY on " + config['Basic']['repeater_name'])
 
 
 # defining core funtions
@@ -30,16 +30,10 @@ def scale_voltage(channel):
         return float(voltage)
 
 def calc_temp(channel):
-    # this is a mess, what was i thinking? It works FB though...
     return float(((((get_voltage(7) * 1000) - 500) / 10)) * 9 / 5 + 32)
 
- 
-# don't mind me, just taking my vars for a walk... (should really clean this up;
-#   works perfectly, but would be nice to change it to a cleaner format
-old_temp = 0
-old_main_power = 0
-old_amplifier_power = 0
 temp = 0
+old_temp = 0
 main_power = 0
 amplifier_power = 0
 
@@ -57,16 +51,23 @@ def updateAdafruitIO():
     aio.send(repeater_location + '-amplifier-power', amplifier_power)
     print(gen_Telemetry())
 
+def isValid(current, previous):
+    return abs(((current - previous) / previous) * 100) < 8
+
+def updateSensors():
+    temp = (round(calc_temp(7), 2))
+    main_power = (round(float(scale_voltage(0)) * float(main_cal), 2))
+    amplifier_power = (round(float(scale_voltage(1)) * float(amplifier_cal), 2))
+
 
 print("\nStarting RepeaterPi service...")
 
 while True:
-    
-    # get the sensor readouts
-    temp = (round(calc_temp(7), 2))
-    main_power = (round(float(scale_voltage(0)) * float(main_cal), 2))
-    amplifier_power = (round(float(scale_voltage(1)) * float(amplifier_cal), 2))
-    
-    # run updateAdafruitIO(), then sleep
-    updateAdafruitIO()
+    updateSensors()
+    if isValid(temp, old_temp) == True:
+        updateAdafruitIO()
+    else:
+        updateSensors()
+        updateAdafruitIO()
+    old_temp = temp
     time.sleep(300)

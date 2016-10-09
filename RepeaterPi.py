@@ -15,8 +15,8 @@ repeater_location = config['Basic']['repeater_location']
 main_cal = config['Basic']['main_cal']
 amplifier_cal = config['Basic']['amplifier_cal']
 
-temp = 0
-old_temp = 0
+temp = 1
+old_temp = 1
 main_power = 0
 amplifier_power = 0
 

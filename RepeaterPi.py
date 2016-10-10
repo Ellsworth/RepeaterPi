@@ -53,6 +53,7 @@ def updateAdafruitIO():
     aio.send(repeater_location + '-temp', tempHistory[0])
     aio.send(repeater_location + '-main-power', voltage[0])
     aio.send(repeater_location + '-amplifier-power', voltage[1])
+    aio.send(repeater_location + '-temp-history', tempHistory)
     print(gen_Telemetry())
 
 
@@ -74,7 +75,7 @@ def kalman(var):
     var[3] = var[2]
     var[2] = var[1]
     var[0] = round((var[2] + var[3] + var[4] + var[5] + var[6]) / 5, 2)
-    return var[0] # return rounded values
+    return var[0]  # return rounded values
 
 
 print("\nStarting RepeaterPi service...")

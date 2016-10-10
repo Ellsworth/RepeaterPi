@@ -42,11 +42,11 @@ def calc_temp(channel):
 
 def gen_Telemetry():
     return ("-------------------------------------- \nTelemetry for " +
-          str(time.asctime(time.localtime(time.time()))) +
-          "\nPrimary: " + str(voltage[0]) +
-          "v Amplifier: " + str(voltage[1]) +
-          "v" + "\nTemperature: " + str(tempHistory[0]) +
-            " Degrees Fahrenheit\nTemperature Average: " + tempHistory + "\n")
+            str(time.asctime(time.localtime(time.time()))) +
+            "\nPrimary: " + str(voltage[0]) +
+            "v Amplifier: " + str(voltage[1]) +
+            "v" + "\nTemperature: " + str(tempHistory[0]) +
+            " Degrees Fahrenheit\nTemperature Average: " + str(tempHistory) + "\n")
 
 
 def updateAdafruitIO():

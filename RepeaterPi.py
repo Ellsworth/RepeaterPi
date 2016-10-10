@@ -7,7 +7,7 @@ from Adafruit_IO import Client
 # Hardwa re SPI configuration:
 mcp = Adafruit_MCP3008.MCP3008(spi=Adafruit_GPIO.SPI.SpiDev(0, 0))
 
-# Config reading, dont ask please.
+# Config reading, don't ask please.
 config = configparser.ConfigParser()
 config.read('/root/RepeaterPi/config.ini')
 aio = Client(config['AdafruitIO']['AIO_Key'])
@@ -23,7 +23,7 @@ x = 0
 print("RepeaterPi 1.2v by KG5KEY on " + config['Basic']['repeater_name'])
 
 
-# defining core funtions
+# defining core functions
 def get_voltage(channel):
     return (mcp.read_adc(channel) * 3.3) / float(1023)
 
@@ -37,7 +37,7 @@ def scale_voltage(channel):
 
 
 def calc_temp(channel):
-    return float(((((get_voltage(channel) * 1000) - 500) / 10) * 9 / 5 + 32)
+    return float(((((get_voltage(channel) * 1000) - 500) / 10) * 9 / 5 + 32))
 
 
 def gen_Telemetry():
@@ -45,8 +45,8 @@ def gen_Telemetry():
           str(time.asctime(time.localtime(time.time()))) +
           "\nPrimary: " + str(voltage[0]) +
           "v Amplifier: " + str(voltage[1]) +
-          "v" + "\nTemperature: " + str(tempHistory[0]) + " Degrees Fahrenheit\nTemperature Average: " +
-            tempHistory +"\n")
+          "v" + "\nTemperature: " + str(tempHistory[0]) +
+            " Degrees Fahrenheit\nTemperature Average: " + tempHistory + "\n")
 
 
 def updateAdafruitIO():

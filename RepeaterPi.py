@@ -77,3 +77,4 @@ while True:
     updateSensors()
     print(voltage)
     print(tempHistory)
+    time.sleep(3)

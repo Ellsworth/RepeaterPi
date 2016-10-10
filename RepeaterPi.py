@@ -15,10 +15,11 @@ repeater_location = config['Basic']['repeater_location']
 main_cal = config['Basic']['main_cal']
 amplifier_cal = config['Basic']['amplifier_cal']
 
-temp = 1
-old_temp = 1
-main_power = 0
-amplifier_power = 0
+# temp: 0, old_temp: 1, main_power: 2, amp_power: 3
+
+# average: 0, 1:1, 2:2, 3:3, 4:4, 5:5
+tempHistory = [0, 0, 0, 0, 0, 0, 0]
+voltage = [0, 0] # primary 0, amp, 1
 
 print("RepeaterPi 1.2v by KG5KEY on " + config['Basic']['repeater_name'])
 
@@ -37,42 +38,42 @@ def scale_voltage(channel):
 def calc_temp(channel):
     return float(((((get_voltage(7) * 1000) - 500) / 10)) * 9 / 5 + 32)
 
-
-
 def gen_Telemetry():
     return ("-------------------------------------- \nTelemetry for " +
           str(time.asctime(time.localtime(time.time()))) +
-          "\nPrimary: " + str(main_power) +
-          "v Amplifier: " + str(amplifier_power) +
-          "v" + "\nTemperature: " + str(temp) + " Degrees Fahrenheit\n")
+          "\nPrimary: " + str(voltage[0]) +
+          "v Amplifier: " + str(voltage[1]) +
+          "v" + "\nTemperature: " + str(tempHistory[0]) + " Degrees Fahrenheit\n")
 
 def updateAdafruitIO():
-    aio.send(repeater_location + '-temp', temp)
-    aio.send(repeater_location + '-main-power', main_power)
-    aio.send(repeater_location + '-amplifier-power', amplifier_power)
+    aio.send(repeater_location + '-temp', tempHistory[0])
+    aio.send(repeater_location + '-main-power', voltage[0])
+    aio.send(repeater_location + '-amplifier-power', voltage[1])
     print(gen_Telemetry())
 
 def isValid(current, previous):
     return abs(((current - previous) / previous) * 100) < 8
 
-#def updateSensors():
-#    temp = (round(calc_temp(7), 2))
-#    main_power = (round(float(scale_voltage(0)) * float(main_cal), 2))
-#    amplifier_power = (round(float(scale_voltage(1)) * float(amplifier_cal), 2))
+def updateSensors():
+    tempHistory[1] = (round(calc_temp(7), 2))
+    voltage[0] = (round(float(scale_voltage(0)) * float(main_cal), 2))
+    voltage[1] = (round(float(scale_voltage(1)) * float(amplifier_cal), 2))
+    kalman(tempHistory)
+
+def kalman(var):
+    # 0 and 1 is the new var, and 0 is the rounded amount from vars 2-6
+    var[6] = var[5]
+    var[5] = var[4]
+    var[4] = var[3]
+    var[3] = var[2]
+    var[2] = var[1]
+    var[0] = (var[2] + var[3] + var[4] + var[5] + var[6]) / 5
+    return var[0] # return rounded values
 
 
 print("\nStarting RepeaterPi service...")
 
 while True:
-    temp = (round(calc_temp(7), 2))
-    main_power = (round(float(scale_voltage(0)) * float(main_cal), 2))
-    amplifier_power = (round(float(scale_voltage(1)) * float(amplifier_cal), 2))
-    if isValid(temp, old_temp) == True:
-        updateAdafruitIO()
-    else:
-        temp = (round(calc_temp(7), 2))
-        main_power = (round(float(scale_voltage(0)) * float(main_cal), 2))
-        amplifier_power = (round(float(scale_voltage(1)) * float(amplifier_cal), 2))
-        updateAdafruitIO()
-    old_temp = temp
-    time.sleep(300)
+    updateSensors()
+    print(voltage)
+    print(tempHistory)

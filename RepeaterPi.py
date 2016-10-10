@@ -73,7 +73,7 @@ def kalman(var):
 
 
 print("\nStarting RepeaterPi service...")
-print("\nCalibrating temperature sensor...")
+print("Calibrating temperature sensor...")
 while x < 5:
     updateSensors()
     x = x + 1

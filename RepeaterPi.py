@@ -47,7 +47,7 @@ def gen_Telemetry():
           "v" + "\nTemperature: " + str(tempHistory[0]) + " Degrees Fahrenheit\n")
 
 def updateAdafruitIO():
-    aio.send(repeater_location + '-temp', tempHistory[0])
+    aio.send(repeater_location + '-temp', tempHistory[1])
     aio.send(repeater_location + '-main-power', voltage[0])
     aio.send(repeater_location + '-amplifier-power', voltage[1])
     print(gen_Telemetry())

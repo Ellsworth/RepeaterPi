@@ -20,6 +20,7 @@ amplifier_cal = config['Basic']['amplifier_cal']
 # average: 0, 1:1, 2:2, 3:3, 4:4, 5:5
 tempHistory = [0, 0, 0, 0, 0, 0, 0]
 voltage = [0, 0] # primary 0, amp, 1
+x = 0
 
 print("RepeaterPi 1.2v by KG5KEY on " + config['Basic']['repeater_name'])
 
@@ -72,9 +73,14 @@ def kalman(var):
 
 
 print("\nStarting RepeaterPi service...")
+print("\nCalibrating temperature sensor...")
+while x < 5:
+    updateSensors()
+    x = x + 1
+    time.sleep(1.5)
+print("Finished calibrating temperature sensor.")
 
 while True:
     updateSensors()
-    print(voltage)
-    print(tempHistory)
-    time.sleep(3)
+    updateAdafruitIO()
+    time.sleep(300)

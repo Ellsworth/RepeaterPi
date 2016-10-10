@@ -67,7 +67,7 @@ def kalman(var):
     var[4] = var[3]
     var[3] = var[2]
     var[2] = var[1]
-    var[0] = (var[2] + var[3] + var[4] + var[5] + var[6]) / 5
+    var[0] = round((var[2] + var[3] + var[4] + var[5] + var[6]) / 5, 2)
     return var[0] # return rounded values
 
 

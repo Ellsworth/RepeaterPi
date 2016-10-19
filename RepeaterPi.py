@@ -30,11 +30,8 @@ def get_voltage(channel):
     return (mcp.read_adc(channel) * 3.3) / float(1023)
 
 def scale_voltage(channel):
-    voltage = ((get_voltage(channel) * 16) / float(3.3))
-    if voltage < 1:
-        return 0.0
-    else:
-        return float(voltage)
+    return (get_voltage(channel) * (61/11))
+
 
 def calc_temp(channel):
     return float(((((get_voltage(7) * 1000) - 500) / 10)) * 9 / 5 + 32)

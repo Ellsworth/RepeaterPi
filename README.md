@@ -33,4 +33,4 @@
 # Calculating Sensor Readout
 - Because these are not digital readouts, conversion from voltage is required.
 	 - The formula for the voltage sensor is as follows:
-		 - get_voltage(channel) * (61/11)
+		 - 'get_voltage(channel) * (61/11)'

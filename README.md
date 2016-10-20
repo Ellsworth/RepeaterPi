@@ -3,9 +3,9 @@
 
 - [Link to source code](https://github.com/ellsworth/repeaterpi)
 
-- Tom, N5TW asked me to look into attaching sensors (Primarily voltage and temp) to the existing Raspberry Pi's inside of the N5TT 146.640 and 145.450 repeaters.
+- Software and with a matching board to remotely measure voltage and temperature and upload the readings to io.adafruit.com
 
-- Using the existing Raspberry Pi reduces complexity, cost, and redundant hardware. The Pi also allows us to add features via updates to the software, requiring no modification to the sensor boards. Making it almost completely software defined.
+- Using the existing Raspberry Pi reduces complexity, cost, and redundant hardware. The Pi also allows us to add features via updates to the software.
 
 ----------
 
@@ -33,10 +33,4 @@
 # Calculating Sensor Readout
 - Because these are not digital readouts, conversion from voltage is required.
 	 - The formula for the voltage sensor is as follows:
-		 - (CHANNEL_VOLTAGE/3.3v) = (VOLTAGE/MAX_VOLTAGE)
-			 - CHANNEL_VOLTAGE: The voltage read by the ADC
-			 - VOLTAGE: This is the voltage, the exact amount scaled up to the correct value.
-			 - MAX_VOLTAGE: The maximum power that will be read. YOU MUST STEP THIS DOWN TO 3.3V OR RISK DAMAGING THE MCP3008
-		 - In the code it is:
-		    - (sensor_readout * 16) / 2.9
-		        - this will spit out the converted voltage
+		 - get_voltage(channel) * (61/11)

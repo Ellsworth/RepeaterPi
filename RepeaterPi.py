@@ -16,7 +16,7 @@ main_cal = config['Basic']['main_cal']
 amplifier_cal = config['Basic']['amplifier_cal']
 
 # average: 0, 1:1, 2:2, 3:3, 4:4, 5:5
-tempHistory = [0, 0, 0, 0, 0, 0, 0]
+tempHistory = [0, 0, 0, 0, 0, 0, 0, 0]
 voltage = [0, 0, 0, 0]  # primary 0, amp, 1, old primary 2, old amp 3
 x = 0
 
@@ -55,6 +55,7 @@ def update_adafruit_io():
     print(gen_telemetry())
     voltage[2] = voltage[0]
     voltage[3] = voltage[1]
+    tempHistory[7] = tempHistory[0]
 
 
 def is_valid(current, previous):
@@ -91,7 +92,7 @@ x = 0
 
 while True:
     if abs(voltage[0] - voltage[2]) > .1 or abs(voltage[1] - voltage[3]) > .1 or \
-            abs(tempHistory[2] - tempHistory[3]) > 3 or x > 9:
+            abs(tempHistory[7] - tempHistory[0]) > 3 or x > 14:
         update_adafruit_io()
         x = 0
     else:

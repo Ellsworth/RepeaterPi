@@ -4,10 +4,10 @@ import Adafruit_MCP3008
 import time
 from Adafruit_IO import Client
 
-# Hardwa re SPI configuration:
+# Hardware SPI configuration:
 mcp = Adafruit_MCP3008.MCP3008(spi=Adafruit_GPIO.SPI.SpiDev(0, 0))
 
-# Config reading, don't ask please.
+# reading config, don't ask please.
 config = configparser.ConfigParser()
 config.read('/root/RepeaterPi/config.ini')
 aio = Client(config['AdafruitIO']['AIO_Key'])
@@ -17,27 +17,28 @@ amplifier_cal = config['Basic']['amplifier_cal']
 
 # average: 0, 1:1, 2:2, 3:3, 4:4, 5:5
 tempHistory = [0, 0, 0, 0, 0, 0, 0]
-voltage = [0, 0] # primary 0, amp, 1
+voltage = [0, 0, 0, 0]  # primary 0, amp, 1, old primary 2, old amp 3
 x = 0
 
 print("RepeaterPi 1.2v by KG5KEY on " + config['Basic']['repeater_name'])
 
 
-# defining core functions
+# gets the data from the ADC and converts it to raw voltage
 def get_voltage(channel):
     return (mcp.read_adc(channel) * 3.3) / float(1023)
 
 
+# scales the raw voltage to the true value read by the voltage probes
 def scale_voltage(channel):
-    return (get_voltage(channel) * (61/11))
+    return get_voltage(channel) * (61/11)
 
 
-
+# calculates temp when given the channel from the ADC
 def calc_temp(channel):
     return float(((((get_voltage(channel) * 1000) - 500) / 10) * 9 / 5 + 32))
 
 
-def gen_Telemetry():
+def gen_telemetry():
     return ("-------------------------------------- \nTelemetry for " +
             str(time.asctime(time.localtime(time.time()))) +
             "\nPrimary: " + str(voltage[0]) +
@@ -46,18 +47,21 @@ def gen_Telemetry():
             " Degrees Fahrenheit\nTemperature Average: " + str(tempHistory) + "\n")
 
 
-def updateAdafruitIO():
+def update_adafruit_io():
     aio.send(repeater_location + '-temp', tempHistory[0])
     aio.send(repeater_location + '-main-power', voltage[0])
     aio.send(repeater_location + '-amplifier-power', voltage[1])
     aio.send(repeater_location + '-temp-history', tempHistory)
-    print(gen_Telemetry())
+    print(gen_telemetry())
+    voltage[2] = voltage[0]
+    voltage[3] = voltage[1]
 
 
-def isValid(current, previous):
+def is_valid(current, previous):
     return abs(((current - previous) / previous) * 100) < 8
 
-def updateSensors():
+
+def update_sensors():
     tempHistory[1] = (round(calc_temp(7), 2))
     voltage[0] = (round(float(scale_voltage(0)) * float(main_cal), 2))
     voltage[1] = (round(float(scale_voltage(1)) * float(amplifier_cal), 2))
@@ -78,12 +82,15 @@ def kalman(var):
 print("\nStarting RepeaterPi service...")
 print("Calibrating temperature sensor...")
 while x < 4:
-    updateSensors()
+    update_sensors()
     x += 1
     time.sleep(1.5)
 print("Finished calibrating temperature sensor.")
+update_adafruit_io()
 
 while True:
-    updateSensors()
-    updateAdafruitIO()
-    time.sleep(300)
+    if abs(voltage[0] - voltage[2]) > .5 or abs(voltage[1] - voltage[3]) > .5 or \
+            abs(tempHistory[2] - tempHistory[3]) > 3:
+        update_adafruit_io()
+    time.sleep(60)
+    update_sensors()

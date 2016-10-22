@@ -90,7 +90,7 @@ update_adafruit_io()
 x = 0
 
 while True:
-    if abs(voltage[0] - voltage[2]) > .5 or abs(voltage[1] - voltage[3]) > .5 or \
+    if abs(voltage[0] - voltage[2]) > .1 or abs(voltage[1] - voltage[3]) > .1 or \
             abs(tempHistory[2] - tempHistory[3]) > 3 or x > 9:
         update_adafruit_io()
         x = 0

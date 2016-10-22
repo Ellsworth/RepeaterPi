@@ -87,10 +87,14 @@ while x < 5:
     time.sleep(1.5)
 print("Finished calibrating temperature sensor.")
 update_adafruit_io()
+x = 0
 
 while True:
     if abs(voltage[0] - voltage[2]) > .5 or abs(voltage[1] - voltage[3]) > .5 or \
-            abs(tempHistory[2] - tempHistory[3]) > 3:
+            abs(tempHistory[2] - tempHistory[3]) > 3 or x > 9:
         update_adafruit_io()
+        x = 0
+    else:
+        x += 1
     time.sleep(60)
     update_sensors()

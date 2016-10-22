@@ -62,9 +62,9 @@ def is_valid(current, previous):
 
 
 def update_sensors():
-    tempHistory[1] = (round(calc_temp(7), 2))
     voltage[0] = (round(float(scale_voltage(0)) * float(main_cal), 2))
     voltage[1] = (round(float(scale_voltage(1)) * float(amplifier_cal), 2))
+    tempHistory[1] = calc_temp(7)
     kalman(tempHistory)
 
 

@@ -30,7 +30,11 @@ def get_voltage(channel):
 
 # scales the raw voltage to the true value read by the voltage probes
 def scale_voltage(channel):
-    return get_voltage(channel) * (61/11)
+    rv = get_voltage(channel) * (61/11)
+    if rv < 1:
+        return 0
+    else:
+        return rv
 
 
 # calculates temp when given the channel from the ADC

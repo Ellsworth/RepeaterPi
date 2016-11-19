@@ -15,12 +15,13 @@ repeater_location = config['Basic']['repeater_location']
 main_cal = config['Basic']['main_cal']
 amplifier_cal = config['Basic']['amplifier_cal']
 
-# average: 0, 1:1, 2:2, 3:3, 4:4, 5:5
-tempHistory = [0, 0, 0, 0, 0, 0, 0]
+# average is 0, most recent 1, least recent 0
+tempHistory = [0, 0, 0, 0, 0, 0]
 voltage = [0, 0, 0, 0]  # primary 0, amp, 1, old primary 2, old amp 3
 x = 0
+startup = True
 
-print("RepeaterPi 1.2v by KG5KEY on " + config['Basic']['repeater_name'])
+print("RepeaterPi 1.3v by KG5KEY on " + config['Basic']['repeater_name'])
 
 
 # gets the data from the ADC and converts it to raw voltage
@@ -30,7 +31,7 @@ def get_voltage(channel):
 
 # scales the raw voltage to the true value read by the voltage probes
 def scale_voltage(channel):
-    rv = get_voltage(channel) * (61/11)
+    rv = (get_voltage(channel) * (61/11))
     if rv < 1:
         return 0
     else:
@@ -66,24 +67,29 @@ def is_valid(current, previous):
 
 
 def update_sensors():
+    if startup:
+        temp_average(calc_temp(7))
+    else:
+        temp = calc_temp(7)
+        if abs(temp - temp_average[0]) > 7:
+            temp_average[1] = temp_average[0]
+
     voltage[0] = (round(float(scale_voltage(0)) * float(main_cal), 2))
     voltage[1] = (round(float(scale_voltage(1)) * float(amplifier_cal), 2))
-    tempHistory[1] = calc_temp(7)
-    kalman(tempHistory)
 
 
-def kalman(var):
-    # 0 and 1 is the new var, and 0 is the rounded amount from vars 2-6
-    var[6] = var[5]
-    var[5] = var[4]
-    var[4] = var[3]
-    var[3] = var[2]
-    var[2] = var[1]
-    var[0] = round((var[2] + var[3] + var[4] + var[5] + var[6]) / 5, 2)
-    return var[0]  # return rounded values
+def temp_average(var):
+    tempHistory[4] = tempHistory[5]
+    tempHistory[3] = tempHistory[4]
+    tempHistory[2] = tempHistory[3]
+    tempHistory[1] = tempHistory[2]
+    tempHistory[1] = var
+    tempHistory[0] = (tempHistory[1] + tempHistory[2] + tempHistory[3] + tempHistory[4] + tempHistory[5]) / 5
 
 
 print("\nStarting RepeaterPi service...")
+
+# calibrating the temp sensor so we can throw out the bad eggs...
 print("Calibrating temperature sensor...")
 while x < 5:
     update_sensors()
@@ -92,6 +98,7 @@ while x < 5:
 print("Finished calibrating temperature sensor.")
 update_adafruit_io()
 x = 0
+startup = False
 
 while True:
     if abs(voltage[0] - voltage[2]) > .05 or abs(voltage[1] - voltage[3]) > .05 or x > 14:

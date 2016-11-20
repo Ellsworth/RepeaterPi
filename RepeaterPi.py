@@ -17,10 +17,10 @@ main_cal = config['Basic']['main_cal']
 amplifier_cal = config['Basic']['amplifier_cal']
 
 # email config
-email_username = str(config['Email']['username'])
-email_password = str(config['Email']['password'])
-email_list = str(config['Email']['email_list'])
-email_raw = str(config['Email']['email_raw'])
+email_username = config['Email']['username']
+email_password = config['Email']['password']
+email_list = config['Email']['email_list']
+email_raw = config['Email']['email_raw']
 email_raw = email_raw.split()
 
 

@@ -96,7 +96,7 @@ def temp_average(var):
     tempHistory[3] = tempHistory[2]
     tempHistory[2] = tempHistory[1]
     tempHistory[1] = var
-    tempHistory[0] = (tempHistory[1] + tempHistory[2] + tempHistory[3] + tempHistory[4] + tempHistory[5]) / 5
+    tempHistory[0] = round((tempHistory[1] + tempHistory[2] + tempHistory[3] + tempHistory[4] + tempHistory[5]) / 5, 2)
 
 
 def format_email(message):

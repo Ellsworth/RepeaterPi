@@ -92,11 +92,17 @@ def update_sensors():
 
 def temp_average(var):
     tempHistory[5] = tempHistory[4]
+    print(tempHistory)
     tempHistory[4] = tempHistory[3]
+    print(tempHistory)
     tempHistory[3] = tempHistory[2]
+    print(tempHistory)
     tempHistory[2] = tempHistory[1]
+    print(tempHistory)
     tempHistory[1] = var
+    print(tempHistory)
     tempHistory[0] = round((tempHistory[1] + tempHistory[2] + tempHistory[3] + tempHistory[4] + tempHistory[5]) / 5, 2)
+    print(tempHistory)
 
 
 def format_email(message):
@@ -126,8 +132,9 @@ while True:
         x += 1
     time.sleep(60)
     update_sensors()
+
+    # email stuff
     if voltage[1] == 0 and sent_amp_alert_email == False:
-        # The code below is a misbegotten scurvy-valiant skainsmate!
         send_email.send(email_username, email_password, format_email
                         ("The amplifier has lost power at the " + repeater_location +
                             " repeater site\n" + gen_telemetry()), email_list)

@@ -89,10 +89,10 @@ def update_sensors():
 
 
 def temp_average(var):
-    tempHistory[4] = tempHistory[5]
-    tempHistory[3] = tempHistory[4]
-    tempHistory[2] = tempHistory[3]
-    tempHistory[1] = tempHistory[2]
+    tempHistory[5] = tempHistory[4]
+    tempHistory[4] = tempHistory[3]
+    tempHistory[3] = tempHistory[2]
+    tempHistory[2] = tempHistory[1]
     tempHistory[1] = var
     tempHistory[0] = (tempHistory[1] + tempHistory[2] + tempHistory[3] + tempHistory[4] + tempHistory[5]) / 5
 

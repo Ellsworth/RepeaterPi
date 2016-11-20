@@ -82,7 +82,7 @@ def update_sensors():
     else:
         temp = calc_temp(7)
         if abs(temp - tempHistory[0]) > 7:
-            temp_average[1] = tempHistory[0]
+            temp_average(tempHistory[0])
         else:
             temp_average(temp)
 
@@ -127,7 +127,7 @@ while True:
     time.sleep(60)
     update_sensors()
     if voltage[1] == 0 and sent_amp_alert_email == False:
-        # The code below is a misbegotten scurvy-valiant skainsmate!)
+        # The code below is a misbegotten scurvy-valiant skainsmate!
         send_email.send(email_username, email_password, format_email
                         ("The amplifier has lost power at the " + repeater_location +
                             " repeater site\n" + gen_telemetry()), email_list)

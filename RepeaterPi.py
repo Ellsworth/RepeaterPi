@@ -92,17 +92,11 @@ def update_sensors():
 
 def temp_average(var):
     tempHistory[5] = tempHistory[4]
-    print(tempHistory)
     tempHistory[4] = tempHistory[3]
-    print(tempHistory)
     tempHistory[3] = tempHistory[2]
-    print(tempHistory)
     tempHistory[2] = tempHistory[1]
-    print(tempHistory)
     tempHistory[1] = var
-    print(tempHistory)
     tempHistory[0] = round((tempHistory[1] + tempHistory[2] + tempHistory[3] + tempHistory[4] + tempHistory[5]) / 5, 2)
-    print(tempHistory)
 
 
 def format_email(message):

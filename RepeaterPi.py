@@ -2,6 +2,7 @@ import configparser
 import Adafruit_GPIO.SPI
 import Adafruit_MCP3008
 import time
+import send_email
 from Adafruit_IO import Client
 
 # Hardware SPI configuration:
@@ -15,11 +16,20 @@ repeater_location = config['Basic']['repeater_location']
 main_cal = config['Basic']['main_cal']
 amplifier_cal = config['Basic']['amplifier_cal']
 
+# email config
+email_username = config['Email']['username']
+email_password = config['Email']['password']
+email_list = config['Email']['email_list']
+email_raw = config['Email']['email_raw']
+email_raw = email_raw.split()
+
+
 # average is 0, most recent 1, least recent 0
 tempHistory = [0, 0, 0, 0, 0, 0]
 voltage = [0, 0, 0, 0]  # primary 0, amp, 1, old primary 2, old amp 3
 x = 0
 startup = True
+sent_amp_alert_email = False
 
 print("RepeaterPi 1.3v by KG5KEY on " + config['Basic']['repeater_name'])
 
@@ -87,6 +97,12 @@ def temp_average(var):
     tempHistory[0] = (tempHistory[1] + tempHistory[2] + tempHistory[3] + tempHistory[4] + tempHistory[5]) / 5
 
 
+def format_email(message):
+    return "From: RepeaterPi <" + email_username + ">\n" \
+            "Subject: Repeater Pi Alert @ " + repeater_location + "\n" \
+            "To: " + str(email_list) + "\n" \
+            + message
+
 print("\nStarting RepeaterPi service...")
 
 # calibrating the temp sensor so we can throw out the bad eggs...
@@ -108,3 +124,15 @@ while True:
         x += 1
     time.sleep(60)
     update_sensors()
+    if voltage[1] == 0 and sent_amp_alert_email == False:
+        # The code below is a misbegotten scurvy-valiant skainsmate!)
+        send_email.send(email_username, email_password, format_email
+                        ("The amplifier has lost power at the " + repeater_location +
+                            " repeater site\n" + gen_telemetry()), email_list)
+        sent_amp_alert_email = True
+    if voltage[1] != 0:
+        sent_amp_alert_email = False
+
+
+
+

@@ -82,7 +82,7 @@ def update_sensors():
     else:
         temp = calc_temp(7)
         if abs(temp - temp_average[0]) > 7:
-            temp_average[1] = temp_average[0]
+            temp_average[1] = tempHistory[0]
 
     voltage[0] = (round(float(scale_voltage(0)) * float(main_cal), 2))
     voltage[1] = (round(float(scale_voltage(1)) * float(amplifier_cal), 2))

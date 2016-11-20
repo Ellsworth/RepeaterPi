@@ -50,7 +50,7 @@ def scale_voltage(channel):
 
 # calculates temp when given the channel from the ADC
 def calc_temp(channel):
-    return float(((((get_voltage(channel) * 1000) - 500) / 10) * 9 / 5 + 32))
+    return round(float(((((get_voltage(channel) * 1000) - 500) / 10) * 9 / 5 + 32)), 2)
 
 
 def gen_telemetry():
@@ -107,10 +107,10 @@ print("\nStarting RepeaterPi service...")
 
 # calibrating the temp sensor so we can throw out the bad eggs...
 print("Calibrating temperature sensor...")
-while x < 5:
+while x < 6:
     update_sensors()
     x += 1
-    time.sleep(1.5)
+    time.sleep(1)
 print("Finished calibrating temperature sensor.")
 update_adafruit_io()
 x = 0

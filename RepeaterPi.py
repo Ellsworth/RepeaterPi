@@ -135,8 +135,9 @@ while True:
         y += 1
     
     if voltage[1] != 0 and outage == True:
-        send_email.send(email_username, email_password, "Hi!", email_list)
-        print("There was an outage for " + str(y) + "minutes!")
+        send_email.send(email_username, email_password, "There was an outage for " + str(y) + " minutes!\n" + gen_telemetry(), email_list)
+        print("There was an outage for " + str(y) + " minutes!")
+        outage = False
         
     time.sleep(60)
     update_sensors()

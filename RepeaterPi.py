@@ -59,7 +59,7 @@ def gen_telemetry():
             "\nPrimary: " + str(voltage[0]) +
             "v Amplifier: " + str(voltage[1]) +
             "v" + "\nTemperature: " + str(tempHistory[0]) +
-            " Degrees Fahrenheit\nTemperature Average: " + str(tempHistory) + "\n")
+            " Degrees Fahrenheit\nTemperature Average: " + str(tempHistory))
 
 
 def update_adafruit_io():

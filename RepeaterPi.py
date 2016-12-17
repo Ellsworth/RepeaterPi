@@ -26,7 +26,7 @@ email_raw = email_raw.split()
 
 # average is 0, most recent 1, least recent 0
 tempHistory = [0, 0, 0, 0, 0, 0]
-voltage = [0, 0, 0, 0]  # primary 0, amp, 1, old primary 2, old amp 3
+voltage = [0, 0, 0, 0]
 x = 0
 startup = True
 sent_amp_alert_email = False
@@ -136,7 +136,7 @@ while True:
     
     if voltage[1] != 0 and outage == True:
         send_email.send(email_username, email_password, "Hi!", email_list)
-        print("There was an outage for " + y + "minutes!")
+        print("There was an outage for " + str(y) + "minutes!")
         
     time.sleep(60)
     update_sensors()

@@ -2,8 +2,9 @@ import configparser
 import Adafruit_GPIO.SPI
 import Adafruit_MCP3008
 import time
-import send_email
+import smtplib
 from Adafruit_IO import Client
+
 
 # Hardware SPI configuration:
 mcp = Adafruit_MCP3008.MCP3008(spi=Adafruit_GPIO.SPI.SpiDev(0, 0))
@@ -100,6 +101,19 @@ def temp_average(var):
     tempHistory[0] = round((tempHistory[1] + tempHistory[2] + tempHistory[3] + tempHistory[4] + tempHistory[5]) / 5, 2)
 
 
+def send_mail(user, password, msg, recipient, subject):
+    try:
+        server = smtplib.SMTP('smtp.gmail.com:587')
+        msg = 'Subject: %s\n\n%s' % (subject, msg)
+        server.ehlo()
+        server.starttls()
+        server.login(user, password)
+        server.sendmail(user, recipient, msg)
+        smtplib.SMTP()
+    except:
+        print("Error sending the email. Possible internet outage detected...")
+
+
 def format_email(message):
     return "From: RepeaterPi <" + email_username + ">\n" \
             "Subject: Repeater Pi Alert @ " + repeater_location + "\n" \
@@ -135,7 +149,7 @@ while True:
         y += 1
     
     if voltage[1] != 0 and outage == True:
-        send_email.send(email_username, email_password, "There was an outage for " + str(y) + " minutes at the " + config['Basic']['repeater_name'] + " repeater site.\n" + gen_telemetry(), email_raw, "Possible outage detected at " + config['Basic']['repeater_name'])
+        send_mail(email_username, email_password, "There was an outage for " + str(y) + " minutes at the " + config['Basic']['repeater_name'] + " repeater site.\n" + gen_telemetry(), email_raw, "Possible outage detected at " + config['Basic']['repeater_name'])
         print("There was an outage for " + str(y) + " minutes!")
         outage = False
         

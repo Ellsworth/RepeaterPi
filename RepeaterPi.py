@@ -137,6 +137,7 @@ while True:
     if voltage[1] != 0 and outage == True:
         send_email.send(email_username, email_password, "There was an outage for " + str(y) + " minutes at the " + config['Basic']['repeater_name'] + " repeater site!\n" + gen_telemetry(), email_raw, "Possible outage detected at " + config['Basic']['repeater_name'])
         print("There was an outage for " + str(y) + " minutes!")
+        outage = False
         
         
     time.sleep(60)

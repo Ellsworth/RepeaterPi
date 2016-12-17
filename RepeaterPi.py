@@ -122,7 +122,7 @@ startup = False
 outage = False
 
 while True:
-    # WTF?!?
+    # Update stuff...
     if abs(voltage[0] - voltage[2]) > .05 or abs(voltage[1] - voltage[3]) > .05 or x > 14:
         update_adafruit_io()
         x = 0
@@ -135,9 +135,10 @@ while True:
         y += 1
     
     if voltage[1] != 0 and outage == True:
+        outage = False
         send_email.send(email_username, email_password, "There was an outage for " + str(y) + " minutes!\n" + gen_telemetry(), email_list)
         print("There was an outage for " + str(y) + " minutes!")
-        outage = False
+        
         
     time.sleep(60)
     update_sensors()

@@ -119,6 +119,7 @@ x = 0
 startup = False
 
 while True:
+    # WTF?!?
     if abs(voltage[0] - voltage[2]) > .05 or abs(voltage[1] - voltage[3]) > .05 or x > 14:
         update_adafruit_io()
         x = 0
@@ -126,16 +127,3 @@ while True:
         x += 1
     time.sleep(60)
     update_sensors()
-
-    # email stuff
-    if voltage[1] == 0 and sent_amp_alert_email == False:
-        send_email.send(email_username, email_password, format_email
-                        ("The amplifier has lost power at the " + repeater_location +
-                            " repeater site\n" + gen_telemetry()), email_list)
-        sent_amp_alert_email = True
-    if voltage[1] != 0:
-        sent_amp_alert_email = False
-
-
-
-

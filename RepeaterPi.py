@@ -66,7 +66,6 @@ def update_adafruit_io():
     aio.send(repeater_location + '-temp', tempHistory[0])
     aio.send(repeater_location + '-main-power', voltage[0])
     aio.send(repeater_location + '-amplifier-power', voltage[1])
-    aio.send(repeater_location + '-temp-history', tempHistory)
     print(gen_telemetry())
     voltage[2] = voltage[0]
     voltage[3] = voltage[1]

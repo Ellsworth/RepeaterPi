@@ -63,13 +63,15 @@ def gen_telemetry():
 
 
 def update_adafruit_io():
-    aio.send(repeater_location + '-temp', tempHistory[0])
-    aio.send(repeater_location + '-main-power', voltage[0])
-    aio.send(repeater_location + '-amplifier-power', voltage[1])
-    print(gen_telemetry())
-    voltage[2] = voltage[0]
-    voltage[3] = voltage[1]
-
+    try:
+        aio.send(repeater_location + '-temp', tempHistory[0])
+        aio.send(repeater_location + '-main-power', voltage[0])
+        aio.send(repeater_location + '-amplifier-power', voltage[1])
+        print(gen_telemetry())
+        voltage[2] = voltage[0]
+        voltage[3] = voltage[1]
+    except:
+        print("An error occurred trying to upload data to Adafruit IO")
 
 def is_valid(current, previous):
     return abs(((current - previous) / previous) * 100) < 8
@@ -115,7 +117,9 @@ while x < 6:
 print("Finished calibrating temperature sensor.")
 update_adafruit_io()
 x = 0
+y = 0
 startup = False
+outage = False
 
 while True:
     # WTF?!?
@@ -124,5 +128,15 @@ while True:
         x = 0
     else:
         x += 1
+        
+    if voltage[1] == 0:
+        print("Warning: Outage detected...")
+        outage = True
+        y += 1
+    
+    if voltage[1] != 0 and outage == True:
+        send_email.send(email_username, email_password, "Hi!", email_list)
+        print("There was an outage for " + y + "minutes!")
+        
     time.sleep(60)
     update_sensors()

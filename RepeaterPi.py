@@ -134,6 +134,7 @@ x = 0
 y = 0
 startup = False
 outage = False
+outage_start = ''
 
 while True:
     # Update stuff...
@@ -145,11 +146,13 @@ while True:
         
     if voltage[1] == 0:
         print("Warning, Possible outage detected. ")
+        if outage == False:
+            outage_start = str(time.asctime(time.localtime(time.time())))
         outage = True
         y += 1
     
     if voltage[1] != 0 and outage == True:
-        send_mail(email_username, email_password, "There was an outage for " + str(y) + " minutes at the " + config['Basic']['repeater_name'] + " repeater site.\n" + gen_telemetry(), email_raw, "Possible outage detected at " + config['Basic']['repeater_name'])
+        send_mail(email_username, email_password, "There was an outage for " + str(y) + " minutes at the " + config['Basic']['repeater_name'] + " repeater site that began at " + outage_start + ".\n" + gen_telemetry(), email_raw, "Possible outage detected at " + config['Basic']['repeater_name'])
         print("There was an outage for " + str(y) + " minutes!")
         outage = False
         

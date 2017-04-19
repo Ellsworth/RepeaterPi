@@ -1,13 +1,8 @@
 import configparser
-import Adafruit_GPIO.SPI
-import Adafruit_MCP3008
 import time
 import smtplib
+import serial
 from Adafruit_IO import Client
-
-
-# Hardware SPI configuration:
-mcp = Adafruit_MCP3008.MCP3008(spi=Adafruit_GPIO.SPI.SpiDev(0, 0))
 
 # reading config, don't ask please.
 config = configparser.ConfigParser()
@@ -24,20 +19,24 @@ email_list = config['Email']['email_list']
 email_raw = config['Email']['email_raw']
 email_raw = email_raw.split()
 
+# Serial setup
+serialPort = serial.Serial('/dev/ttyUSB0')  # open serial port
+
 
 # average is 0, most recent 1, least recent 0
+arduinoData = [0, 0, 0]
 tempHistory = [0, 0, 0, 0, 0, 0]
 voltage = [0, 0, 0, 0]
 x = 0
 startup = True
 sent_amp_alert_email = False
 
-print("RepeaterPi 1.3v by KG5KEY on " + config['Basic']['repeater_name'])
+print("RepeaterPi 2.0v by KG5KEY on " + config['Basic']['repeater_name'])
 
 
 # gets the data from the ADC and converts it to raw voltage
 def get_voltage(channel):
-    return (mcp.read_adc(channel) * 3.3) / float(1023)
+    return (arduinoData[channel]) * 3.3) / float(1023)
 
 
 # scales the raw voltage to the true value read by the voltage probes
@@ -143,14 +142,14 @@ while True:
         x = 0
     else:
         x += 1
-        
+
     if voltage[1] == 0:
         print("Warning, Possible outage detected. ")
         if outage == False:
             outage_start = str(time.asctime(time.localtime(time.time())))
         outage = True
         y += 1
-    
+
     if voltage[1] != 0 and outage == True:
         send_mail(email_username, email_password, "There was an outage for " + str(y) + " minutes at the " +
                   config['Basic']['repeater_name'] + " repeater site that began at " + outage_start + ".\n" +

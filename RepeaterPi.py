@@ -35,25 +35,25 @@ print("RepeaterPi 2.0v by KG5KEY on " + config['Basic']['repeater_name'])
 
 
 # gets the data from the ADC and converts it to raw voltage
-def get_voltage(channel):
-    return (arduinoData[channel]) * 3.3) / float(1023)
+def getVoltage(channel):
+    return (arduinoData[channel] * 3.3) / float(1023)
 
 
 # scales the raw voltage to the true value read by the voltage probes
 def scale_voltage(channel):
-    rv = (get_voltage(channel) * (61/11))
+    rv = (getVoltage(channel) * (61/11))
     if rv < 1:
         return 0
     else:
         return rv
 
 
-# calculates temp when given the channel from the ADC
-def calc_temp(channel):
-    return round(float(((((get_voltage(channel) * 1000) - 500) / 10) * 9 / 5 + 32)), 2)
+# calculates temp
+def calcTemp(channel):
+    return round(float(((((getVoltage(channel) * 1000) - 500) / 10) * 9 / 5 + 32)), 2)
 
 
-def gen_telemetry():
+def genTelemetry():
     return ("-------------------------------------- \nTelemetry for " +
             str(time.asctime(time.localtime(time.time()))) +
             "\nPrimary: " + str(voltage[0]) +
@@ -62,36 +62,31 @@ def gen_telemetry():
             " Degrees Fahrenheit\nTemperature History: " + str(tempHistory))
 
 
-def update_adafruit_io():
+def updateAdafruit():
     try:
         aio.send(repeater_location + '-temp', tempHistory[0])
         aio.send(repeater_location + '-main-power', voltage[0])
         aio.send(repeater_location + '-amplifier-power', voltage[1])
-        print(gen_telemetry())
+        print(genTelemetry())
         voltage[2] = voltage[0]
         voltage[3] = voltage[1]
     except:
         print("An error occurred trying to upload data to Adafruit IO")
 
-def is_valid(current, previous):
-    return abs(((current - previous) / previous) * 100) < 8
 
 
-def update_sensors():
-    if startup:
-        temp_average(calc_temp(7))
+def updateSensors(): # redo this
+    temp = calcTemp(7)
+    if abs(temp - tempHistory[0]) > 7:
+        tempAverage(tempHistory[0])
     else:
-        temp = calc_temp(7)
-        if abs(temp - tempHistory[0]) > 7:
-            temp_average(tempHistory[0])
-        else:
-            temp_average(temp)
+        tempAverage(temp)
 
     voltage[0] = (round(float(scale_voltage(0)) * float(main_cal), 2))
     voltage[1] = (round(float(scale_voltage(1)) * float(amplifier_cal), 2))
 
 
-def temp_average(var):
+def tempAverage(var):
     tempHistory[5] = tempHistory[4]
     tempHistory[4] = tempHistory[3]
     tempHistory[3] = tempHistory[2]
@@ -100,7 +95,7 @@ def temp_average(var):
     tempHistory[0] = round((tempHistory[1] + tempHistory[2] + tempHistory[3] + tempHistory[4] + tempHistory[5]) / 5, 2)
 
 
-def send_mail(user, password, msg, recipient, subject):
+def sendMail(user, password, msg, recipient, subject):
     try:
         server = smtplib.SMTP('smtp.gmail.com:587')
         msg = 'Subject: %s\n\n%s' % (subject, msg)
@@ -113,7 +108,7 @@ def send_mail(user, password, msg, recipient, subject):
         print("Error sending the email. Possible internet outage detected...")
 
 
-def format_email(message):
+def formatEmail(message):
     return "From: RepeaterPi <" + email_username + ">\n" \
             "Subject: Repeater Pi Alert @ " + repeater_location + "\n" \
             "To: " + str(email_list) + "\n" \
@@ -124,11 +119,11 @@ print("\nStarting RepeaterPi service...")
 # calibrating the temp sensor so we can throw out the bad eggs...
 print("Calibrating temperature sensor...")
 while x < 6:
-    update_sensors()
+    updateSensors()
     x += 1
     time.sleep(1)
 print("Finished calibrating temperature sensor.")
-update_adafruit_io()
+updateAdafruit()
 x = 0
 y = 0
 startup = False
@@ -138,7 +133,7 @@ outage_start = ''
 while True:
     # Update stuff...
     if abs(voltage[0] - voltage[2]) > .05 or abs(voltage[1] - voltage[3]) > .05 or x > 14:
-        update_adafruit_io()
+        updateAdafruit()
         x = 0
     else:
         x += 1
@@ -150,19 +145,19 @@ while True:
         outage = True
         y += 1
 
-    if voltage[1] != 0 and outage == True:
-        send_mail(email_username, email_password, "There was an outage for " + str(y) + " minutes at the " +
+    if voltage[1] != 0 and outage:
+        sendMail(email_username, email_password, "There was an outage for " + str(y) + " minutes at the " +
                   config['Basic']['repeater_name'] + " repeater site that began at " + outage_start + ".\n" +
-                  gen_telemetry(), email_raw, "Possible outage ended at " + config['Basic']['repeater_name'])
+                  genTelemetry(), email_raw, "Possible outage ended at " + config['Basic']['repeater_name'])
         print("There was an outage for " + str(y) + " minutes!")
         outage = False
         y = 0
     if y == 1:
-        send_mail(email_username, email_password, "There is an outage detected at the " +
+        sendMail(email_username, email_password, "There is an outage detected at the " +
                   config['Basic']['repeater_name'] + " repeater site that began at " + outage_start + ".\n" +
-                  gen_telemetry(), email_raw, "Possible outage detected at " + config['Basic']['repeater_name'])
+                  genTelemetry(), email_raw, "Possible outage detected at " + config['Basic']['repeater_name'])
 
 
 
     time.sleep(60)
-    update_sensors()
+    updateSensors()

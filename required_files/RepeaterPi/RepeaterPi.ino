@@ -13,7 +13,6 @@ long readVcc() {
   result = ADCL;
   result |= ADCH<<8;
   result = 1125300L / result; // Back-calculate AVcc in mV
-  result = result / 10;
   return result;
 }
 
@@ -35,6 +34,6 @@ void loop()
   Serial.print(",");
   Serial.print(analogRead(ampPin));
   Serial.print(",");
-  Serial.println( readVcc(), DEC );
+  Serial.println(readVcc(), DEC );
   delay(6000);
 }

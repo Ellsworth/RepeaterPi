@@ -24,7 +24,8 @@ serialPort = serial.Serial('/dev/ttyUSB0')  # open serial port
 
 
 # average is 0, most recent 1, least recent 0
-arduinoData = [0, 0, 0]
+serialdata = ""
+arduinoData = [0, 0, 0, 0] # temp, main, amp, 5v ref voltage
 tempHistory = [0, 0, 0, 0, 0, 0]
 voltage = [0, 0, 0, 0]
 x = 0
@@ -76,6 +77,13 @@ def updateAdafruit():
 
 
 def updateSensors(): # redo this
+    serialdata = str(ser.readline())
+    for char in "b'rn":
+            serialdata = serialdata.replace(char,'')
+    for char in "\\":
+            serialdata = serialdata.replace(char,'')
+    arduinoData = serialdata.split(",")
+
     temp = calcTemp(7)
     if abs(temp - tempHistory[0]) > 7:
         tempAverage(tempHistory[0])

@@ -63,7 +63,6 @@ def updateAdafruit():
         aio.send(repeater_location + '-temp', tempHistory[0])
         aio.send(repeater_location + '-main-power', voltage[0])
         aio.send(repeater_location + '-amplifier-power', voltage[1])
-        print(genTelemetry())
         voltage[2] = voltage[0]
         voltage[3] = voltage[1]
     except:
@@ -133,6 +132,9 @@ x = 0
 while True:
     # Update stuff...
     updateSensors()
+    print(voltage)
+    print(tempHistory)
+    print(serialdata)
 
     if abs(voltage[0] - voltage[2]) > .05 or abs(voltage[1] - voltage[3]) > .05 or x > 14:
         updateAdafruit()
@@ -140,7 +142,7 @@ while True:
     else:
         x += 1
 
-    if voltage[1] == 0:
+    if voltage[1] != 0:
         print("Warning, Possible outage detected. ")
         if outage == False:
             outage_start = str(time.asctime(time.localtime(time.time())))
@@ -160,5 +162,5 @@ while True:
                   genTelemetry(), email_raw, "Possible outage detected at " + config['Basic']['repeater_name'])
 
 
-
+    print(genTelemetry())
     time.sleep(60)

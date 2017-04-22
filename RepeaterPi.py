@@ -41,7 +41,7 @@ def getVoltage(channel):
 
 
 # scales the raw voltage to the true value read by the voltage probes
-def scale_voltage(channel):
+def scaleVoltage(channel):
     rv = (getVoltage(channel) * (61/11))
     if rv < 1:
         return 0
@@ -84,8 +84,8 @@ def updateSensors():
         serialdata = serialdata.replace(char,'')
     arduinoData = serialdata.split(",")
 
-    voltage[0] = (round(float(scale_voltage(1)) * float(main_cal), 2))
-    voltage[1] = (round(float(scale_voltage(2)) * float(amplifier_cal), 2))
+    voltage[0] = (round(float(scaleVoltage(1)) * float(main_cal), 2))
+    voltage[1] = (round(float(scaleVoltage(2)) * float(amplifier_cal), 2))
 
     temp = calcTemp(0)
     if abs(temp - tempHistory[0]) > 7:

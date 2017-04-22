@@ -130,6 +130,8 @@ while x < 6:
     updateSensors()
     x += 1
     time.sleep(1)
+    print(arduinoData)
+    print(tempHistory)
 print("Finished calibrating temperature sensor.")
 updateAdafruit()
 x = 0

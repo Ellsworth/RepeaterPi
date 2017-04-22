@@ -71,7 +71,7 @@ def updateAdafruit():
 
 
 def updateSensors():
-    serialdata = str(ser.readline())
+    serialdata = str(serialPort.readline())
     print(serialdata)
     for char in "b'rn":
         serialdata = serialdata.replace(char,'')

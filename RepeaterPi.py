@@ -37,7 +37,7 @@ print("RepeaterPi 2.0v by KG5KEY on " + config['Basic']['repeater_name'])
 
 # gets the data from the ADC and converts it to raw voltage
 def getVoltage(channel):
-    return (arduinoData[channel] * 3.3) / float(1023)
+    return (arduinoData[channel] * arduinoData[3] / float(1023)
 
 
 # scales the raw voltage to the true value read by the voltage probes
@@ -75,23 +75,23 @@ def updateAdafruit():
         print("An error occurred trying to upload data to Adafruit IO")
 
 
-
-def updateSensors(): # redo this
-    serialdata = str(serialPort.readline())
+def updateSensors():
+    serialdata = str(ser.readline())
+    print(serialdata)
     for char in "b'rn":
-            serialdata = serialdata.replace(char,'')
+        serialdata = serialdata.replace(char,'')
     for char in "\\":
-            serialdata = serialdata.replace(char,'')
+        serialdata = serialdata.replace(char,'')
     arduinoData = serialdata.split(",")
+
+    voltage[0] = (round(float(scale_voltage(1)) * float(main_cal), 2))
+    voltage[1] = (round(float(scale_voltage(2)) * float(amplifier_cal), 2))
 
     temp = calcTemp(0)
     if abs(temp - tempHistory[0]) > 7:
         tempAverage(tempHistory[0])
     else:
         tempAverage(temp)
-
-    voltage[0] = (round(float(scale_voltage(1)) * float(main_cal), 2))
-    voltage[1] = (round(float(scale_voltage(2)) * float(amplifier_cal), 2))
 
 
 def tempAverage(var):
@@ -124,16 +124,6 @@ def formatEmail(message):
 
 print("\nStarting RepeaterPi service...")
 
-# calibrating the temp sensor so we can throw out the bad eggs...
-print("Calibrating temperature sensor...")
-while x < 6:
-    updateSensors()
-    x += 1
-    time.sleep(1)
-    print(arduinoData)
-    print(tempHistory)
-print("Finished calibrating temperature sensor.")
-updateAdafruit()
 x = 0
 y = 0
 startup = False
@@ -142,6 +132,8 @@ outage_start = ''
 
 while True:
     # Update stuff...
+    updateSensors()
+
     if abs(voltage[0] - voltage[2]) > .05 or abs(voltage[1] - voltage[3]) > .05 or x > 14:
         updateAdafruit()
         x = 0
@@ -170,4 +162,3 @@ while True:
 
 
     time.sleep(60)
-    updateSensors()

@@ -124,8 +124,8 @@ startup = False
 outage = False
 outage_start = ''
 
-for x in range(6):
-    tempAverage(calcTemp(0))
+while x < 6:
+    tempAverage[calcTemp(0)]
 
 while True:
     # Update stuff...

@@ -43,10 +43,13 @@ def getVoltage(channel):
 # scales the raw voltage to the true value read by the voltage probes
 def scaleVoltage(channel):
     rv = (getVoltage(channel) * (61/11))
+    return (rv)
+    """"
     if rv < 1:
         return 0
     else:
         return rv
+    """"
 
 
 # calculates temp

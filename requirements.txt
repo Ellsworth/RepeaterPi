@@ -1,6 +1,5 @@
 configparser
-Adafruit_GPIO
-Adafruit_MCP3008
 time
-Adafruit_IO
 smtplib
+pyserial
+Adafruit_IO

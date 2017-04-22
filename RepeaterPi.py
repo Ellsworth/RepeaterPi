@@ -84,14 +84,14 @@ def updateSensors(): # redo this
             serialdata = serialdata.replace(char,'')
     arduinoData = serialdata.split(",")
 
-    temp = calcTemp(7)
+    temp = calcTemp(0)
     if abs(temp - tempHistory[0]) > 7:
         tempAverage(tempHistory[0])
     else:
         tempAverage(temp)
 
-    voltage[0] = (round(float(scale_voltage(0)) * float(main_cal), 2))
-    voltage[1] = (round(float(scale_voltage(1)) * float(amplifier_cal), 2))
+    voltage[0] = (round(float(scale_voltage(1)) * float(main_cal), 2))
+    voltage[1] = (round(float(scale_voltage(2)) * float(amplifier_cal), 2))
 
 
 def tempAverage(var):

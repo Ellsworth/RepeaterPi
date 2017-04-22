@@ -72,7 +72,6 @@ def updateAdafruit():
 
 def updateSensors():
     serialdata = str(serialPort.readline())
-    print(serialdata)
     for char in "b'rn":
         serialdata = serialdata.replace(char,'')
     for char in "\\":
@@ -124,6 +123,9 @@ y = 0
 startup = False
 outage = False
 outage_start = ''
+
+for x in range(6):
+    tempAverage(calcTemp(0))
 
 while True:
     # Update stuff...

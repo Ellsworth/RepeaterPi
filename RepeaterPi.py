@@ -125,7 +125,10 @@ outage = False
 outage_start = ''
 
 while x < 6:
-    tempAverage[calcTemp(0)]
+    tempAverage(calcTemp(0))
+    x = x + 1
+
+x = 0
 
 while True:
     # Update stuff...

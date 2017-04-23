@@ -76,30 +76,9 @@ def updateSensors():
         serialdata = serialdata.replace(char,'')
     arduinoData = serialdata.split(",")
     print(arduinoData)
-
     print(getVoltage(0))
     print(arduinoData[0])
 
-""""
-def updateSensors():
-    serialdata = str(serialPort.readline())
-    for char in "b'rn":
-        serialdata = serialdata.replace(char,'')
-    for char in "\\":
-        serialdata = serialdata.replace(char,'')
-    arduinoData = serialdata.split(",")
-    print(arduinoData)
-
-
-    voltage[0] = (round(float(scaleVoltage(1)) * float(main_cal), 2))
-    voltage[1] = (round(float(scaleVoltage(2)) * float(amplifier_cal), 2))
-
-    temp = calcTemp(0)
-    if abs(temp - tempHistory[0]) > 7:
-        tempAverage(tempHistory[0])
-    else:
-        tempAverage(temp)
-""""
 
 def tempAverage(var):
     tempHistory[5] = tempHistory[4]

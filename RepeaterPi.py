@@ -65,7 +65,6 @@ def updateAdafruit():
         aio.send(repeater_location + '-amplifier-power', voltage[1])
         voltage[2] = voltage[0]
         voltage[3] = voltage[1]
-        print(genTelemetry())
     except:
         print("An error occurred trying to upload data to Adafruit IO")
 
@@ -77,19 +76,14 @@ def updateSensors():
     for char in "\\":
         serialdata = serialdata.replace(char,'')
     arduinoData = serialdata.split(",")
+    temp = calcTemp(0)
 
 
     voltage[0] = (round(float(scaleVoltage(1)) * float(main_cal), 2))
     voltage[1] = (round(float(scaleVoltage(2)) * float(amplifier_cal), 2))
-
-    temp = calcTemp(0)
-    tempHistory[5] = temp
-    tempHistory[4] = temp
-    tempHistory[3] = temp
-    tempHistory[2] = temp
-    tempHistory[1] = temp
-    tempAverage(calcTemp(0))
-
+    if startup:
+        tempHistory = [temp, temp, temp, temp, temp, temp]
+    tempAverage[calcTemp(0)]
 
 
 
@@ -129,5 +123,34 @@ startup = False
 outage = False
 outage_start = ''
 
-updateSensors()
-updateAdafruit()
+
+while True:
+    updateSensors()
+    if abs(voltage[0] - voltage[2]) > .05 or abs(voltage[1] - voltage[3]) > .05 or x > 14:
+        updateAdafruit()
+        x = 0
+    else:
+        x += 1
+
+    if voltage[1] != 0:
+        print("Warning, Possible outage detected. ")
+        if outage == False:
+            outage_start = str(time.asctime(time.localtime(time.time())))
+        outage = True
+        y += 1
+
+    if voltage[1] != 0 and outage:
+        sendMail(email_username, email_password, "There was an outage for " + str(y) + " minutes at the " +
+                  config['Basic']['repeater_name'] + " repeater site that began at " + outage_start + ".\n" +
+                  genTelemetry(), email_raw, "Possible outage ended at " + config['Basic']['repeater_name'])
+        print("There was an outage for " + str(y) + " minutes!")
+        outage = False
+        y = 0
+    if y == 1:
+        sendMail(email_username, email_password, "There is an outage detected at the " +
+                  config['Basic']['repeater_name'] + " repeater site that began at " + outage_start + ".\n" +
+                  genTelemetry(), email_raw, "Possible outage detected at " + config['Basic']['repeater_name'])
+
+
+    print(genTelemetry())
+    time.sleep(60)

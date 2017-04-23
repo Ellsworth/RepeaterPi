@@ -65,6 +65,7 @@ def updateAdafruit():
         aio.send(repeater_location + '-amplifier-power', voltage[1])
         voltage[2] = voltage[0]
         voltage[3] = voltage[1]
+        print(genTelemetry())
     except:
         print("An error occurred trying to upload data to Adafruit IO")
 
@@ -80,7 +81,15 @@ def updateSensors():
 
     voltage[0] = (round(float(scaleVoltage(1)) * float(main_cal), 2))
     voltage[1] = (round(float(scaleVoltage(2)) * float(amplifier_cal), 2))
+
+    temp = calcTemp(0)
+    tempHistory[5] = temp
+    tempHistory[4] = temp
+    tempHistory[3] = temp
+    tempHistory[2] = temp
+    tempHistory[1] = temp
     tempAverage(calcTemp(0))
+
 
 
 

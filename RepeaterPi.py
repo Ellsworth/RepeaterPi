@@ -68,7 +68,19 @@ def updateAdafruit():
     except:
         print("An error occurred trying to upload data to Adafruit IO")
 
+def updateSensors():
+    serialdata = str(serialPort.readline())
+    for char in "b'rn":
+        serialdata = serialdata.replace(char,'')
+    for char in "\\":
+        serialdata = serialdata.replace(char,'')
+    arduinoData = serialdata.split(",")
+    print(arduinoData)
 
+    print(getVoltage(0))
+    print(arduinoData[0])
+
+""""
 def updateSensors():
     serialdata = str(serialPort.readline())
     for char in "b'rn":
@@ -87,7 +99,7 @@ def updateSensors():
         tempAverage(tempHistory[0])
     else:
         tempAverage(temp)
-
+""""
 
 def tempAverage(var):
     tempHistory[5] = tempHistory[4]
@@ -118,6 +130,7 @@ def formatEmail(message):
             + message
 
 print("\nStarting RepeaterPi service...")
+
 
 print(getVoltage(0))
 print(calcTemp(0))

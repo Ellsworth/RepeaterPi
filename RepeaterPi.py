@@ -116,6 +116,7 @@ def formatEmail(message):
             + message
 
 print("\nStarting RepeaterPi service...")
+updateSensors()
 
 x = 0
 y = 0

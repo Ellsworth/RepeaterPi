@@ -83,7 +83,7 @@ def updateSensors():
     voltage[1] = (round(float(scaleVoltage(2)) * float(amplifier_cal), 2))
     if startup:
         tempHistory = [temp, temp, temp, temp, temp, temp]
-    tempAverage[calcTemp(0)]
+    tempAverage(calcTemp(0))
 
 
 

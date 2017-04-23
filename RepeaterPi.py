@@ -36,8 +36,9 @@ print("RepeaterPi 2.0v by KG5KEY on " + config['Basic']['repeater_name'])
 
 
 # gets the data from the ADC and converts it to raw voltage
-def getVoltage(channel):
-    return (float(arduinoData[channel]) * (float(arduinoData[3]) * .0001) / float(1023))
+ def getVoltage(channel):
+    return (float(arduinoData[channel]) * 4.7 /) float(1023)
+
 
 
 def scaleVoltage(channel):
@@ -112,4 +113,3 @@ print("\nStarting RepeaterPi service...")
 
 
 print(getVoltage(0))
-print(calcTemp(0))

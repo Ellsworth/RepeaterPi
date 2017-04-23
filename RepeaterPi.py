@@ -76,6 +76,8 @@ def updateSensors():
     for char in "\\":
         serialdata = serialdata.replace(char,'')
     arduinoData = serialdata.split(",")
+    print(arduinoData)
+    print(serialdata.split(","))
 
     voltage[0] = (round(float(scaleVoltage(1)) * float(main_cal), 2))
     voltage[1] = (round(float(scaleVoltage(2)) * float(amplifier_cal), 2))

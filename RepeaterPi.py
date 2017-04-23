@@ -37,7 +37,7 @@ print("RepeaterPi 2.0v by KG5KEY on " + config['Basic']['repeater_name'])
 
 # gets the data from the ADC and converts it to raw voltage
 def getVoltage(channel):
-    return (arduinoData[channel] * arduinoData[3] / float(1023))
+    return (float(arduinoData[channel]) * (float(arduinoData[3]) * .0001) / float(1023))
 
 
 def scaleVoltage(channel):
@@ -77,7 +77,7 @@ def updateSensors():
         serialdata = serialdata.replace(char,'')
     arduinoData = serialdata.split(",")
     print(arduinoData)
-    print(serialdata.split(","))
+
 
     voltage[0] = (round(float(scaleVoltage(1)) * float(main_cal), 2))
     voltage[1] = (round(float(scaleVoltage(2)) * float(amplifier_cal), 2))

@@ -66,7 +66,7 @@ def updateAdafruit():
         aio.send(repeater_location + '-arduino-supply', arduinoData[3])
         voltage[2] = voltage[0]
         voltage[3] = voltage[1]
-        print(Updating Adafruit IO...)
+        print("Updating Adafruit IO...")
     except:
         print("An error occurred trying to upload data to Adafruit IO")
 

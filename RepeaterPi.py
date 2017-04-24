@@ -131,6 +131,7 @@ outage_start = ''
 
 arduinoData = getSerialData()
 tempHistory = calibrateTemp(calcTemp(0))
+updateAdafruit()
 
 
 while True:

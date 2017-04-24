@@ -132,12 +132,6 @@ arduinoData = getSerialData()
 tempHistory = calibrateTemp(calcTemp(0))
 
 
-"""
-arduinoData = getSerialData()
-tempHistory = calibrateTemp(calcTemp(0))
-
-"""
-
 while True:
     arduinoData = getSerialData()
     tempAverage(calcTemp(0))
@@ -155,8 +149,8 @@ while True:
 
     print(genTelemetry()
 
-    if voltage[1] = 0:
-        print("Warning, Possible outage detected. ")
+    if voltage[1] == 0:
+        print("Warning, Possible outage detected.")
         if outage == False:
             outage_start = str(time.asctime(time.localtime(time.time())))
         outage = True
@@ -173,8 +167,6 @@ while True:
         sendMail(email_username, email_password, "There is an outage detected at the " +
                   config['Basic']['repeater_name'] + " repeater site that began at " + outage_start + ".\n" +
                   genTelemetry(), email_raw, "Possible outage detected at " + config['Basic']['repeater_name'])
-
-)
 
 
     time.sleep(60)

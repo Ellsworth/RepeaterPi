@@ -64,14 +64,15 @@ def updateAdafruit():
         aio.send(repeater_location + '-main-power', voltage[0])
         aio.send(repeater_location + '-amplifier-power', voltage[1])
         aio.send(repeater_location + '-arduino-supply', arduinoData[3])
-
         voltage[2] = voltage[0]
         voltage[3] = voltage[1]
+        print(genTelemetry())
     except:
         print("An error occurred trying to upload data to Adafruit IO")
 
 def calibrateTemp(temp):
     return ([temp, temp, temp, temp, temp, temp])
+    updateAdafruit()
 
 
 def getSerialData():
@@ -134,8 +135,8 @@ tempHistory = calibrateTemp(calcTemp(0))
 
 while True:
     arduinoData = getSerialData()
-    tempAverage(calcTemp(0))
 
+    tempAverage(calcTemp(0))
     voltage[0] = (round(float(scaleVoltage(1)) * float(main_cal), 2))
     voltage[1] = (round(float(scaleVoltage(2)) * float(amplifier_cal), 2))
 
@@ -147,7 +148,7 @@ while True:
     else:
         x += 1
 
-    print(genTelemetry())
+
 
     if voltage[1] == 0:
         print("Warning, Possible outage detected.")

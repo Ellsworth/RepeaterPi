@@ -155,7 +155,7 @@ while True:
 
     print(genTelemetry()
 
-    if voltage[1] == 0:
+    if voltage[1] = 0:
         print("Warning, Possible outage detected. ")
         if outage == False:
             outage_start = str(time.asctime(time.localtime(time.time())))

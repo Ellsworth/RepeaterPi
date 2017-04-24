@@ -37,7 +37,7 @@ print("RepeaterPi 2.0v by KG5KEY on " + config['Basic']['repeater_name'])
 
 # gets the data from the ADC and converts it to raw voltage
 def getVoltage(channel):
-    return (float(arduinoData[channel]) * (float(arduinoData[3]) * .0001) / float(1023))
+    return (float(arduinoData[channel]) * (float(arduinoData[3]) * .001) / float(1023))
 
 
 def scaleVoltage(channel):
@@ -63,31 +63,28 @@ def updateAdafruit():
         aio.send(repeater_location + '-temp', tempHistory[0])
         aio.send(repeater_location + '-main-power', voltage[0])
         aio.send(repeater_location + '-amplifier-power', voltage[1])
+        aio.send(repeater_location + '-arduino-supply', arduinoData[3])
+
         voltage[2] = voltage[0]
         voltage[3] = voltage[1]
     except:
         print("An error occurred trying to upload data to Adafruit IO")
 
-def calibrateTemp():
-    temp = calcTemp(0)
-    x = 0
-    while x < 6:
-        tempHistory = temp
-        x + x + 1
-    x = 0
+def calibrateTemp(temp):
+    return ([temp, temp, temp, temp, temp, temp])
 
 
-def updateSerialData():
+def getSerialData():
     serialdata = str(serialPort.readline())
     for char in "b'rn":
         serialdata = serialdata.replace(char,'')
     for char in "\\":
         serialdata = serialdata.replace(char,'')
-    arduinoData = serialdata.split(",")
+    return(serialdata.split(","))
 
 
 def updateSensors():
-    updateSerialData()
+    arduinoData = getSerialData()
     tempAverage(calcTemp(0))
 
     voltage[0] = (round(float(scaleVoltage(1)) * float(main_cal), 2))
@@ -101,6 +98,7 @@ def tempAverage(var):
     tempHistory[2] = tempHistory[1]
     tempHistory[1] = var
     tempHistory[0] = round((tempHistory[1] + tempHistory[2] + tempHistory[3] + tempHistory[4] + tempHistory[5]) / 5, 2)
+    return tempHistory
 
 
 def sendMail(user, password, msg, recipient, subject):
@@ -130,7 +128,53 @@ startup = False
 outage = False
 outage_start = ''
 
-updateSerialData()
-calibrateTemp()
-print(tempHistory)
-updateAdafruit()
+arduinoData = getSerialData()
+tempHistory = calibrateTemp(calcTemp(0))
+
+
+"""
+arduinoData = getSerialData()
+tempHistory = calibrateTemp(calcTemp(0))
+
+"""
+
+while True:
+    arduinoData = getSerialData()
+    tempAverage(calcTemp(0))
+
+    voltage[0] = (round(float(scaleVoltage(1)) * float(main_cal), 2))
+    voltage[1] = (round(float(scaleVoltage(2)) * float(amplifier_cal), 2))
+
+
+
+    if abs(voltage[0] - voltage[2]) > .05 or abs(voltage[1] - voltage[3]) > .05 or x > 14:
+        updateAdafruit()
+        x = 0
+    else:
+        x += 1
+
+    print(genTelemetry()
+
+    if voltage[1] == 0:
+        print("Warning, Possible outage detected. ")
+        if outage == False:
+            outage_start = str(time.asctime(time.localtime(time.time())))
+        outage = True
+        y += 1
+
+    if voltage[1] != 0 and outage:
+        sendMail(email_username, email_password, "There was an outage for " + str(y) + " minutes at the " +
+                  config['Basic']['repeater_name'] + " repeater site that began at " + outage_start + ".\n" +
+                  genTelemetry(), email_raw, "Possible outage ended at " + config['Basic']['repeater_name'])
+        print("There was an outage for " + str(y) + " minutes!")
+        outage = False
+        y = 0
+    if y == 1:
+        sendMail(email_username, email_password, "There is an outage detected at the " +
+                  config['Basic']['repeater_name'] + " repeater site that began at " + outage_start + ".\n" +
+                  genTelemetry(), email_raw, "Possible outage detected at " + config['Basic']['repeater_name'])
+
+)
+
+
+    time.sleep(60)

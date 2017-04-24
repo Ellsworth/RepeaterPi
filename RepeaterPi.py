@@ -147,7 +147,7 @@ while True:
     else:
         x += 1
 
-    print(genTelemetry()
+    print(genTelemetry())
 
     if voltage[1] == 0:
         print("Warning, Possible outage detected.")

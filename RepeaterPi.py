@@ -66,7 +66,7 @@ def updateAdafruit():
         aio.send(repeater_location + '-arduino-supply', arduinoData[3])
         voltage[2] = voltage[0]
         voltage[3] = voltage[1]
-        print(genTelemetry())
+        print(Updating Adafruit IO...)
     except:
         print("An error occurred trying to upload data to Adafruit IO")
 
@@ -117,7 +117,7 @@ def sendMail(user, password, msg, recipient, subject):
 
 def formatEmail(message):
     return "From: RepeaterPi <" + email_username + ">\n" \
-            "Subject: Repeater Pi Alert @ " + repeater_location + "\n" \
+            "Subject: RepeaterPi Alert @ " + repeater_location + "\n" \
             "To: " + str(email_list) + "\n" \
             + message
 
@@ -152,8 +152,8 @@ while True:
 
 
     if voltage[1] == 0:
-        print("Warning, Possible outage detected.")
         if outage == False:
+            print("Warning, Possible outage detected.")
             outage_start = str(time.asctime(time.localtime(time.time())))
         outage = True
         y += 1
@@ -162,7 +162,7 @@ while True:
         sendMail(email_username, email_password, "There was an outage for " + str(y) + " minutes at the " +
                   config['Basic']['repeater_name'] + " repeater site that began at " + outage_start + ".\n" +
                   genTelemetry(), email_raw, "Possible outage ended at " + config['Basic']['repeater_name'])
-        print("There was an outage for " + str(y) + " minutes!")
+        print("There was an outage for " + str(y) + " minutes.")
         outage = False
         y = 0
     if y == 1:
@@ -170,5 +170,5 @@ while True:
                   config['Basic']['repeater_name'] + " repeater site that began at " + outage_start + ".\n" +
                   genTelemetry(), email_raw, "Possible outage detected at " + config['Basic']['repeater_name'])
 
-
+    print(genTelemetry())
     time.sleep(60)

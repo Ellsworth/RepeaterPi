@@ -129,7 +129,9 @@ startup = False
 outage = False
 outage_start = ''
 
+print("Reading serial data, this may take up to 60 seconds...")
 arduinoData = getSerialData()
+
 tempHistory = calibrateTemp(calcTemp(0))
 updateAdafruit()
 
@@ -138,10 +140,9 @@ while True:
     arduinoData = getSerialData()
 
     tempAverage(calcTemp(0))
+
     voltage[0] = (round(float(scaleVoltage(1)) * float(main_cal), 2))
     voltage[1] = (round(float(scaleVoltage(2)) * float(amplifier_cal), 2))
-
-
 
     if abs(voltage[0] - voltage[2]) > .05 or abs(voltage[1] - voltage[3]) > .05 or x > 14:
         updateAdafruit()

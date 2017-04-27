@@ -35,5 +35,5 @@ void loop()
   Serial.print(analogRead(ampPin));
   Serial.print(",");
   Serial.println(readVcc(), DEC );
-  delay(60000);
+  delay(55000);
 }

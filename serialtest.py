@@ -36,5 +36,5 @@ def scaleVoltage(channel):
 
 print("\nRaw Arduino Data: " + str(arduinoData))
 print("Temperature: " + str(calcTemp(0)) + "F")
-print("Main: " + str((scaleVoltage(1) * main_cal)) + "Amp: " + str((scaleVoltage(2) * main_cal)))
+print("Main: " + str((float(scaleVoltage(1)) * float(main_cal))) + "Amp: " + str(float((scaleVoltage(2)) * float(main_cal))))
 print("Arduino Supply Voltage : " + str(arduinoData[3]) + "mV")

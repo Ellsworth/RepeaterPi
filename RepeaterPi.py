@@ -45,7 +45,7 @@ def getVoltage(channel):
 
 
 def scaleVoltage(channel):
-    rv = (get_voltage(channel) * (61/11))
+    rv = (getVoltage(channel) * (61/11))
     if rv < 1:
         return 0
     else:

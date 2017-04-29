@@ -21,7 +21,7 @@ def calcTemp(channel):
     return round(float(((((getVoltage(channel) * 1000) - 500) / 10) * 9 / 5 + 32)), 2)
 
 def scaleVoltage(channel):
-    rv = (get_voltage(channel) * (61/11))
+    rv = (getVoltage(channel) * (61/11))
     if rv < 1:
         return 0
     else:

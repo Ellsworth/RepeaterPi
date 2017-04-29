@@ -10,7 +10,7 @@ amplifier_cal = config['Basic']['amplifier_cal']
 print("RepeaterPi Serial Tester...")
 print("Reading data from Arduino, this may take up to 60 seconds.")
 
-ser = serial.Serial('/dev/ttyUSB0')  # open serial port
+ser = serial.Serial('/dev/ttyUSB0')  # open serial
 
 serialdata = str(ser.readline())
 

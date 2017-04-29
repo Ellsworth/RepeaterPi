@@ -4,6 +4,10 @@ import smtplib
 import serial
 from Adafruit_IO import Client
 
+# It's a good idea to add the following line to your crontab
+# 00 0 * * * systemctl restart RepeaterPi.service
+# This will restart the RepeaterPi service at night to help with bugs.
+
 # reading config, don't ask please.
 config = configparser.ConfigParser()
 config.read('/root/RepeaterPi/config.ini')
@@ -41,7 +45,11 @@ def getVoltage(channel):
 
 
 def scaleVoltage(channel):
-    return (getVoltage(channel) * (61/11))
+    rv = (get_voltage(channel) * (61/11))
+    if rv < 1:
+        return 0
+    else:
+        return rv
 
 
 # calculates temp
@@ -144,7 +152,7 @@ while True:
     voltage[0] = (round(float(scaleVoltage(1)) * float(main_cal), 2))
     voltage[1] = (round(float(scaleVoltage(2)) * float(amplifier_cal), 2))
 
-    if abs(voltage[0] - voltage[2]) > .05 or abs(voltage[1] - voltage[3]) > .05 or x > 14:
+    if abs(voltage[0] - voltage[2]) > .1 or abs(voltage[1] - voltage[3]) > .1 or x > 14:
         updateAdafruit()
         x = 0
     else:

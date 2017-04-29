@@ -1,4 +1,11 @@
 import serial
+import configparser
+
+config = configparser.ConfigParser()
+config.read('/root/RepeaterPi/config.ini')
+
+main_cal = config['Basic']['main_cal']
+amplifier_cal = config['Basic']['amplifier_cal']
 
 print("RepeaterPi Serial Tester...")
 print("Reading data from Arduino, this may take up to 60 seconds.")
@@ -6,7 +13,7 @@ print("Reading data from Arduino, this may take up to 60 seconds.")
 ser = serial.Serial('/dev/ttyUSB0')  # open serial port
 
 serialdata = str(ser.readline())
-print(serialdata)
+
 for char in "b'rn":
         serialdata = serialdata.replace(char,'')
 for char in "\\":
@@ -27,7 +34,7 @@ def scaleVoltage(channel):
     else:
         return rv
 
-print("Raw Arduino Data: " + str(arduinoData))
-print("\nTemperature: " + str(calcTemp(0)) + "F")
-print("Main: " + str(getVoltage(1)) + "v Amp: " + str(scaleVoltage(1)) + "v")
-print("Arduino Supply Voltage : " + str(arduinoData) + "mV")
+print("\nRaw Arduino Data: " + str(arduinoData))
+print("Temperature: " + str(calcTemp(0)) + "F")
+print("Main: " + str((scaleVoltage(1) * main_cal)) + "v Amp: " + str((scaleVoltage(1) * amplifier_cal) + "v")
+print("Arduino Supply Voltage : " + str(arduinoData[3]) + "mV")

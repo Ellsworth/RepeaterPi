@@ -140,7 +140,7 @@ print("Reading serial data, this may take up to 60 seconds...")
 arduinoData = getSerialData()
 
 tempHistory = calibrateTemp(calcTemp(0))
-updateAdafruit()
+
 voltage[2] = voltage[0]
 voltage[3] = voltage[1]
 
@@ -153,7 +153,7 @@ while True:
     voltage[0] = (round(float(scaleVoltage(1)) * float(main_cal), 2))
     voltage[1] = (round(float(scaleVoltage(2)) * float(amplifier_cal), 2))
 
-    if abs(voltage[0] - voltage[2]) > .1 or abs(voltage[1] - voltage[3]) > .1 or x > 14:
+    if abs(voltage[0] - voltage[2]) > .3 or abs(voltage[1] - voltage[3]) > .3 or x > 14:
         updateAdafruit()
         voltage[2] = voltage[0]
         voltage[3] = voltage[1]

@@ -6,7 +6,7 @@ from Adafruit_IO import Client
 
 # It's a good idea to add the following line to your crontab
 # 00 0 * * * systemctl restart RepeaterPi.service
-# This will restart the RepeaterPi service at night to help with bugs.
+# This will restart the RepeaterPi service at night to help with timeouts.
 
 # reading config, don't ask please.
 config = configparser.ConfigParser()
@@ -66,14 +66,13 @@ def genTelemetry():
             " Degrees Fahrenheit\nTemperature History: " + str(tempHistory))
 
 
+
 def updateAdafruit():
     try:
         aio.send(repeater_location + '-temp', tempHistory[0])
         aio.send(repeater_location + '-main-power', voltage[0])
         aio.send(repeater_location + '-amplifier-power', voltage[1])
         aio.send(repeater_location + '-arduino-supply', arduinoData[3])
-        voltage[2] = voltage[0]
-        voltage[3] = voltage[1]
         print("Updating Adafruit IO...")
     except:
         print("An error occurred trying to upload data to Adafruit IO")
@@ -142,6 +141,8 @@ arduinoData = getSerialData()
 
 tempHistory = calibrateTemp(calcTemp(0))
 updateAdafruit()
+voltage[2] = voltage[0]
+voltage[3] = voltage[1]
 
 
 while True:
@@ -154,6 +155,8 @@ while True:
 
     if abs(voltage[0] - voltage[2]) > .1 or abs(voltage[1] - voltage[3]) > .1 or x > 14:
         updateAdafruit()
+        voltage[2] = voltage[0]
+        voltage[3] = voltage[1]
         x = 0
     else:
         x += 1

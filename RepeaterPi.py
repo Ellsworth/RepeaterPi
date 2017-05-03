@@ -54,7 +54,11 @@ def scaleVoltage(channel):
 
 # calculates temp
 def calcTemp(channel):
-    return round(float(((((getVoltage(channel) * 1000) - 500) / 10) * 9 / 5 + 32)), 2)
+    temp = round(float(((((getVoltage(channel) * 1000) - 500) / 10) * 9 / 5 + 32)), 2)
+    if abs(temp - tempHistory[0]) > 4
+        temp = tempHistory[0]
+    return temp
+
 
 
 def genTelemetry():

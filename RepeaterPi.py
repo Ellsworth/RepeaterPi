@@ -55,6 +55,8 @@ def scaleVoltage(channel):
 # calculates temp
 def calcTemp(channel):
     temp = round(float(((((getVoltage(channel) * 1000) - 500) / 10) * 9 / 5 + 32)), 2)
+    if abs(temp - tempHistory[0]) > 4:
+        temp = tempHistory[0]
     return temp
 
 
@@ -79,7 +81,9 @@ def updateAdafruit():
     except:
         print("An error occurred trying to upload data to Adafruit IO")
 
-def calibrateTemp(temp):
+
+def calibrateTemp(channel):
+    temp = round(float(((((getVoltage(channel) * 1000) - 500) / 10) * 9 / 5 + 32)), 2)
     return ([temp, temp, temp, temp, temp, temp])
     updateAdafruit()
 
@@ -141,7 +145,7 @@ outage_start = ''
 print("Reading serial data, this may take up to 60 seconds...")
 arduinoData = getSerialData()
 
-tempHistory = calibrateTemp(calcTemp(0))
+tempHistory = calibrateTemp(0)
 
 voltage[2] = voltage[0]
 voltage[3] = voltage[1]

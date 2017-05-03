@@ -49,7 +49,6 @@ def scaleVoltage(channel):
     if rv < 1:
         return 0
     else:
-        return rv
 
 
 # calculates temp

@@ -3,6 +3,7 @@ import time
 import smtplib
 import serial
 from Adafruit_IO import Client
+from subprocess import check_output
 
 # It's a good idea to add the following line to your crontab
 # 00 0 * * * systemctl restart RepeaterPi.service
@@ -36,7 +37,7 @@ x = 0
 startup = True
 sent_amp_alert_email = False
 
-print("RepeaterPi 2.0v by KG5KEY on " + config['Basic']['repeater_name'])
+print("RepeaterPi 2.2v by KG5KEY on " + config['Basic']['repeater_name'])
 
 
 # gets the data from the ADC and converts it to raw voltage
@@ -60,6 +61,13 @@ def calcTemp(channel):
     return temp
 
 
+def getPiTemp():
+    cputemp = check_output(['/opt/vc/bin/vcgencmd', 'measure_temp'])
+    cputemp = str(cputemp[5:9])
+    for char in "b'":
+        cputemp = cputemp.replace(char,'')
+    return cputemp
+
 
 def genTelemetry():
     return ("-------------------------------------- \nTelemetry for " +
@@ -77,6 +85,7 @@ def updateAdafruit():
         aio.send(repeater_location + '-main-power', voltage[0])
         aio.send(repeater_location + '-amplifier-power', voltage[1])
         aio.send(repeater_location + '-arduino-supply', arduinoData[3])
+        aio.send(repeater_location + '-cpu-temp', getPiTemp())
         print("Updating Adafruit IO...")
     except:
         print("An error occurred trying to upload data to Adafruit IO")

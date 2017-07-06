@@ -14,9 +14,14 @@ __version__ = "2.3"
 
 # reading config, don't ask please.
 
+if len(sys.argv) > 1 and sys.argv[1] == "--test":
+    config_file = 'config_example.ini'
+else:
+    config_file = 'config.ini'
+
 config = configparser.ConfigParser()
 try:
-    config.read('config.ini')
+    config.read(config_file)
 except Exception:
     print("Could not read config.ini, it likely does not exist.")
     sys.exit(1)

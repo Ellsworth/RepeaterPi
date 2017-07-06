@@ -10,7 +10,7 @@
 ----------
 
 
-# Sensors 
+# Sensors (Out of Date)
 
  - At heart this project uses the "MCP3008" Analog to Digital Converter (ADC)
  - Using the MCP3008 allows fewer GPIO pins needed for multiple sensors. We can also use it to measure voltages of equipment inside the repeater cabinet

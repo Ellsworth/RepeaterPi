@@ -1,21 +1,31 @@
+from Adafruit_IO import Client
+from subprocess import check_output
 import configparser
 import time
 import smtplib
 import serial
-from Adafruit_IO import Client
-from subprocess import check_output
+import sys
+
+__version__ = "2.3"
 
 # It's a good idea to add the following line to your crontab
 # 00 0 * * * systemctl restart RepeaterPi.service
 # This will restart the RepeaterPi service at night to help with timeouts.
 
 # reading config, don't ask please.
+
 config = configparser.ConfigParser()
-config.read('/root/RepeaterPi/config.ini')
+try:
+    config.read('config.ini')
+except Exception:
+    print("Could not read config.ini, it likely does not exist.")
+    sys.exit(1)
+
 aio = Client(config['AdafruitIO']['AIO_Key'])
 repeater_location = config['Basic']['repeater_location']
 main_cal = config['Basic']['main_cal']
 amplifier_cal = config['Basic']['amplifier_cal']
+serial_port = config['Basic']['serial_port']
 
 # email config
 email_username = config['Email']['username']
@@ -25,7 +35,7 @@ email_raw = config['Email']['email_raw']
 email_raw = email_raw.split()
 
 # Serial setup
-serialPort = serial.Serial('/dev/ttyUSB0')  # open serial port
+serialPort = serial.Serial()  # open serial port
 
 
 # average is 0, most recent 1, least recent 0
@@ -37,7 +47,8 @@ x = 0
 startup = True
 sent_amp_alert_email = False
 
-print("RepeaterPi 2.2v by KG5KEY on " + config['Basic']['repeater_name'])
+print("RepeaterPi %sv by KG5KEY on %s" % (__version__,config['Basic']['repeater_name'],))
+
 
 
 # gets the data from the ADC and converts it to raw voltage
@@ -142,60 +153,72 @@ def formatEmail(message):
             "To: " + str(email_list) + "\n" \
             + message
 
-print("\nStarting RepeaterPi service...")
+if len(sys.argv) > 1 and sys.argv[1] == "--test":
+    print("\n--- Start Report  ---")
+    print(sys.version)
+    print("PySerial: " + str(serial.__version__))
+    print("--- End of Report ---")
+    sys.exit(0)
+else:
+    with serial.Serial() as ser:
+        ser.baudrate = 9600
+        ser.port = serial_port
+        ser.open()
 
 x = 0
 y = 0
-startup = False
+
+startup = True
 outage = False
+
 outage_start = ''
 
-print("Reading serial data, this may take up to 60 seconds...")
+print("Reading data from Arduino, this may take up to 60 seconds.")
+
+serial.port(serial_port)
 arduinoData = getSerialData()
 
 tempHistory = calibrateTemp(0)
-
 voltage[2] = voltage[0]
 voltage[3] = voltage[1]
+startup = False
 
+if __name__ == '__main__':
+    print("\nStarting RepeaterPi service...")
 
-while True:
-    arduinoData = getSerialData()
+    while True:
+        arduinoData = getSerialData()
 
-    tempAverage(calcTemp(0))
+        tempAverage(calcTemp(0))
 
-    voltage[0] = (round(float(scaleVoltage(1)) * float(main_cal), 2))
-    voltage[1] = (round(float(scaleVoltage(2)) * float(amplifier_cal), 2))
+        voltage[0] = (round(float(scaleVoltage(1)) * float(main_cal), 2))
+        voltage[1] = (round(float(scaleVoltage(2)) * float(amplifier_cal), 2))
 
-    if abs(voltage[0] - voltage[2]) > .3 or abs(voltage[1] - voltage[3]) > .3 or x > 14:
-        updateAdafruit()
-        voltage[2] = voltage[0]
-        voltage[3] = voltage[1]
-        x = 0
-    else:
-        x += 1
+        if abs(voltage[0] - voltage[2]) > .3 or abs(voltage[1] - voltage[3]) > .3 or x > 14:
+            updateAdafruit()
+            voltage[2] = voltage[0]
+            voltage[3] = voltage[1]
+            x = 0
+        else:
+            x += 1
 
-
-
-    if voltage[1] == 0:
-        if outage == False:
+        if voltage[1] == 0 and outage == False:
             print("Warning, Possible outage detected.")
             outage_start = str(time.asctime(time.localtime(time.time())))
-        outage = True
-        y += 1
+            outage = True
+            sendMail(email_username, email_password, "There is an outage detected at the " +
+                config['Basic']['repeater_name'] + " repeater site that began at " + outage_start + ".\n" +
+                genTelemetry(), email_raw, "Possible outage detected at " + config['Basic']['repeater_name'])
+            y += 1
 
-    if voltage[1] != 0 and outage:
-        sendMail(email_username, email_password, "There was an outage for " + str(y) + " minutes at the " +
-                  config['Basic']['repeater_name'] + " repeater site that began at " + outage_start + ".\n" +
-                  genTelemetry(), email_raw, "Possible outage ended at " + config['Basic']['repeater_name'])
-        print("There was an outage for " + str(y) + " minutes.")
-        outage = False
-        y = 0
-    if y == 1:
-        sendMail(email_username, email_password, "There is an outage detected at the " +
-                  config['Basic']['repeater_name'] + " repeater site that began at " + outage_start + ".\n" +
-                  genTelemetry(), email_raw, "Possible outage detected at " + config['Basic']['repeater_name'])
+        if voltage[1] != 0 and outage:
+            sendMail(email_username, email_password, "There was an outage for " + str(y) + " minutes at the " +
+                config['Basic']['repeater_name'] + " repeater site that began at " + outage_start + ".\n" +
+                genTelemetry(), email_raw, "Possible outage ended at " + config['Basic']['repeater_name'])
+            print("There was an outage for " + str(y) + " minutes.")
+            outage = False
+            y = 0
 
-    print(genTelemetry())
-    startup = True
-    time.sleep(60)
+
+        print(genTelemetry())
+        time.sleep(60)

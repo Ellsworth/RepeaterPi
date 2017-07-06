@@ -87,9 +87,3 @@ ENV/
 
 # Rope project settings
 .ropeproject
-
-# RepeaterPi Stuff
-Taylor_config.ini
-Georgetown_config.ini
-config.ini
-RepeaterPi_Old.py

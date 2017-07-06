@@ -166,9 +166,9 @@ if len(sys.argv) > 1 and sys.argv[1] == "--test":
     sys.exit(0)
 else:
     with serial.Serial() as ser:
-        ser.baudrate = 9600
-        ser.port = serial_port
-        ser.open()
+        serialPort.baudrate = 9600
+        serialPort.port = serial_port
+        serialPort.open()
 
 x = 0
 y = 0
@@ -180,7 +180,6 @@ outage_start = ''
 
 print("Reading data from Arduino, this may take up to 60 seconds.")
 
-serial.port(serial_port)
 arduinoData = getSerialData()
 
 tempHistory = calibrateTemp(0)

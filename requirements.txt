@@ -1,5 +1,4 @@
 configparser
-smtplib
 pyserial
 Adafruit_IO
 subprocess

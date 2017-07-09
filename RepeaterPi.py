@@ -7,6 +7,8 @@ import serial
 import sys
 
 __version__ = "2.3"
+__author__ = "Erich Ellsworth"
+__contact__ = "erich.ellsworth@g.austincc.edu"
 
 # It's a good idea to add the following line to your crontab
 # 00 0 * * * systemctl restart RepeaterPi.service
@@ -53,8 +55,7 @@ startup = True
 sent_amp_alert_email = False
 
 print("RepeaterPi %sv by KG5KEY on %s" % (__version__,config['Basic']['repeater_name'],))
-
-
+print("\nCopyright (C) 2017 Erich Ellsworth\nContact: erich.ellsworth@g.austincc.edu")
 
 # gets the data from the ADC and converts it to raw voltage
 def getVoltage(channel):
@@ -158,13 +159,33 @@ def formatEmail(message):
             "To: " + str(email_list) + "\n" \
             + message
 
+if len(sys.argv) > 1 and sys.argv[1] == "--copyright":
+    print("\nThis program is free software: you can redistribute it and/or modify\n" +
+        "it under the terms of the GNU General Public License as published by\n" +
+        "the Free Software Foundation, either version 3 of the License, or\n" +
+        "(at your option) any later version.\n\n" +
+        "This program is distributed in the hope that it will be useful,\n" +
+        "but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
+        "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
+        "GNU General Public License for more details.\n\n" +
+        "You should have received a copy of the GNU General Public License\n" +
+        "along with this program. If not, see <http://www.gnu.org/licenses/>.")
+    sys.exit(0)
+
 if len(sys.argv) > 1 and sys.argv[1] == "--test":
     print("\n--- Start Report  ---")
     print(sys.version)
     print("PySerial: " + str(serial.__version__))
     print("--- End of Report ---")
     sys.exit(0)
-else:
+
+if len(sys.argv) > 1 and sys.argv[1] == "--help":
+    print("\nProgram Arguments...")
+    print("--test      : dry run of the program, useful for CI testing.")
+    print("--copyright : prints copyright info")
+    sys.exit(0)
+
+if len(sys.argv) == 0:
     with serial.Serial() as ser:
         serialPort.baudrate = 9600
         serialPort.port = serial_port

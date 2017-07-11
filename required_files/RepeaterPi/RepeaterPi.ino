@@ -1,7 +1,6 @@
 int tempPin = 1;
 int mainPin = 6;
 int ampPin = 7;
-String output;
 
 long readVcc() {
   long result;

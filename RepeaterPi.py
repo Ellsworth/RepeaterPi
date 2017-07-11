@@ -44,6 +44,12 @@ email_raw = email_raw.split()
 # Serial setup
 serialPort = serial.Serial()  # open serial port
 
+if len(sys.argv) == 0:
+    with serial.Serial() as ser:
+        serialPort.baudrate = 9600
+        serialPort.port = serial_port
+        serialPort.open()
+
 
 # average is 0, most recent 1, least recent 0
 serialdata = ""
@@ -185,11 +191,6 @@ if len(sys.argv) > 1 and sys.argv[1] == "--help":
     print("--copyright : prints copyright info")
     sys.exit(0)
 
-if len(sys.argv) == 0:
-    with serial.Serial() as ser:
-        serialPort.baudrate = 9600
-        serialPort.port = serial_port
-        serialPort.open()
 
 x = 0
 y = 0

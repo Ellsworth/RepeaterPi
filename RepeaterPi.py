@@ -44,11 +44,10 @@ email_raw = email_raw.split()
 # Serial setup
 serialPort = serial.Serial()  # open serial port
 
-if len(sys.argv) == 0:
-    with serial.Serial() as ser:
-        serialPort.baudrate = 9600
-        serialPort.port = serial_port
-        serialPort.open()
+if len(sys.argv) == 0 or 1:
+    serialPort.baudrate = 9600
+    serialPort.port = serial_port
+    serialPort.open()
 
 
 # average is 0, most recent 1, least recent 0

@@ -10,8 +10,6 @@ __version__ = "2.3"
 __author__ = "Erich Ellsworth"
 __contact__ = "erich.ellsworth@g.austincc.edu"
 
-print(len(sys.argv))
-
 # It's a good idea to add the following line to your crontab
 # 00 0 * * * systemctl restart RepeaterPi.service
 # This will restart the RepeaterPi service at night to help with timeouts.

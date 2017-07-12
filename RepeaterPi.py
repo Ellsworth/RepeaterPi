@@ -16,12 +16,11 @@ __contact__ = "erich.ellsworth@g.austincc.edu"
 
 # reading config, don't ask please.
 
-#if len(sys.argv) > 1:
-#    if sys.argv[1] == "--test":
-#        print("Test mode detected!")
-#        config_file = 'config_example.ini'
-#else:
-config_file = '/root/RepeaterPi/config.ini'
+if len(sys.argv) > 1:
+    if sys.argv[1] == "--test":
+        config_file = 'config_example.ini'
+else:
+    config_file = '/root/RepeaterPi/config.ini'
 
 config = configparser.ConfigParser()
 try:
@@ -160,8 +159,8 @@ def formatEmail(message):
             "Subject: RepeaterPi Alert @ " + repeater_location + "\n" \
             "To: " + str(email_list) + "\n" \
             + message
-"""
-if True == False:
+
+if len(sys.argv) > 1:
     if sys.argv[1] == "--copyright":
         print("\nThis program is free software: you can redistribute it and/or modify\n" +
             "it under the terms of the GNU General Public License as published by\n" +
@@ -186,7 +185,7 @@ if True == False:
         print("--copyright : prints copyright info")
     print("Exiting!")
     sys.exit(0)
-"""
+
 
 serialPort.baudrate = 9600
 serialPort.port = serial_port

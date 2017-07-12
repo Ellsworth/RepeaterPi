@@ -15,12 +15,13 @@ __contact__ = "erich.ellsworth@g.austincc.edu"
 # This will restart the RepeaterPi service at night to help with timeouts.
 
 # reading config, don't ask please.
-if len(sys.argv) > 1:
-    if sys.argv[1] == "--test":
-        print("Test mode detected!")
-        config_file = 'config_example.ini'
-else:
-    config_file = 'config.ini'
+
+#if len(sys.argv) > 1:
+#    if sys.argv[1] == "--test":
+#        print("Test mode detected!")
+#        config_file = 'config_example.ini'
+#else:
+config_file = 'config.ini'
 
 config = configparser.ConfigParser()
 try:
@@ -160,7 +161,7 @@ def formatEmail(message):
             "To: " + str(email_list) + "\n" \
             + message
 
-if len(sys.argv) > 1:
+if True == False:
     if sys.argv[1] == "--copyright":
         print("\nThis program is free software: you can redistribute it and/or modify\n" +
             "it under the terms of the GNU General Public License as published by\n" +

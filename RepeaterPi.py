@@ -16,7 +16,7 @@ __contact__ = "erich.ellsworth@g.austincc.edu"
 
 # reading config, don't ask please.
 
-if len(sys.argv) > 1 and sys.argv[1] == "--test":
+if sys.argv[1] == "--test":
     config_file = 'config_example.ini'
 else:
     config_file = 'config.ini'
@@ -43,11 +43,6 @@ email_raw = email_raw.split()
 
 # Serial setup
 serialPort = serial.Serial()  # open serial port
-
-if len(sys.argv) == 0 or 1:
-    serialPort.baudrate = 9600
-    serialPort.port = serial_port
-    serialPort.open()
 
 
 # average is 0, most recent 1, least recent 0
@@ -164,7 +159,7 @@ def formatEmail(message):
             "To: " + str(email_list) + "\n" \
             + message
 
-if len(sys.argv) > 1 and sys.argv[1] == "--copyright":
+if sys.argv[1] == "--copyright":
     print("\nThis program is free software: you can redistribute it and/or modify\n" +
         "it under the terms of the GNU General Public License as published by\n" +
         "the Free Software Foundation, either version 3 of the License, or\n" +
@@ -177,19 +172,24 @@ if len(sys.argv) > 1 and sys.argv[1] == "--copyright":
         "along with this program. If not, see <http://www.gnu.org/licenses/>.")
     sys.exit(0)
 
-if len(sys.argv) > 1 and sys.argv[1] == "--test":
+if sys.argv[1] == "--test":
     print("\n--- Start Report  ---")
     print(sys.version)
     print("PySerial: " + str(serial.__version__))
     print("--- End of Report ---")
     sys.exit(0)
 
-if len(sys.argv) > 1 and sys.argv[1] == "--help":
+if sys.argv[1] == "--help":
     print("\nProgram Arguments...")
     print("--test      : dry run of the program, useful for CI testing.")
     print("--copyright : prints copyright info")
     sys.exit(0)
 
+if sys.argv == None or len(sys.argv) > 4:
+    with serial.Serial() as ser:
+        serialPort.baudrate = 9600
+        serialPort.port = serial_port
+        serialPort.open()
 
 x = 0
 y = 0

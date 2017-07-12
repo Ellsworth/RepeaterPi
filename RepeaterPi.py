@@ -15,7 +15,6 @@ __contact__ = "erich.ellsworth@g.austincc.edu"
 # This will restart the RepeaterPi service at night to help with timeouts.
 
 # reading config, don't ask please.
-
 if sys.argv[1] == "--test":
     config_file = 'config_example.ini'
 else:
@@ -185,11 +184,10 @@ if sys.argv[1] == "--help":
     print("--copyright : prints copyright info")
     sys.exit(0)
 
-if sys.argv == None or len(sys.argv) > 4:
-    with serial.Serial() as ser:
-        serialPort.baudrate = 9600
-        serialPort.port = serial_port
-        serialPort.open()
+
+serialPort.baudrate = 9600
+serialPort.port = serial_port
+serialPort.open()
 
 x = 0
 y = 0

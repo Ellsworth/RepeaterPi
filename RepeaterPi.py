@@ -10,13 +10,17 @@ __version__ = "2.3"
 __author__ = "Erich Ellsworth"
 __contact__ = "erich.ellsworth@g.austincc.edu"
 
+print(len(sys.argv))
+
 # It's a good idea to add the following line to your crontab
 # 00 0 * * * systemctl restart RepeaterPi.service
 # This will restart the RepeaterPi service at night to help with timeouts.
 
 # reading config, don't ask please.
-if sys.argv[1] == "--test":
-    config_file = 'config_example.ini'
+if len(sys.argv) > 1:
+    if sys.argv[1] == "--test":
+        print("Test mode detected!")
+        config_file = 'config_example.ini'
 else:
     config_file = 'config.ini'
 
@@ -158,7 +162,7 @@ def formatEmail(message):
             "To: " + str(email_list) + "\n" \
             + message
 
-if len(sys.argv) > 2:
+if len(sys.argv) > 1:
     if sys.argv[1] == "--copyright":
         print("\nThis program is free software: you can redistribute it and/or modify\n" +
             "it under the terms of the GNU General Public License as published by\n" +

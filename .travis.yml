@@ -7,5 +7,3 @@ install:
 script:
 - python -m compileall ./RepeaterPi.py
 - python ./RepeaterPi.py --test
-notifications:
-  webhooks: https://fathomless-fjord-24024.herokuapp.com/notify

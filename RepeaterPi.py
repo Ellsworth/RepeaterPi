@@ -6,7 +6,7 @@ import smtplib
 import serial
 import sys
 
-__version__ = "2.3"
+__version__ = "2.4"
 __author__ = "Erich Ellsworth"
 __contact__ = "erich.ellsworth@g.austincc.edu"
 
@@ -99,10 +99,14 @@ def genTelemetry():
 
 def updateAdafruit():
     try:
-        aio.send(repeater_location + '-temp', tempHistory[0])
-        aio.send(repeater_location + '-main-power', voltage[0])
-        aio.send(repeater_location + '-amplifier-power', voltage[1])
-        aio.send(repeater_location + '-cpu-temp', getPiTemp())
+        data_dict = {
+        repeater_location + '-temp': tempHistory[0],
+        repeater_location + '-main-power': voltage[0],
+        repeater_location + '-amplifier-power': voltage[1],
+        repeater_location + '-cpu-temp': getPiTemp() }
+
+        send_group(repeater_location, data_dict)
+
         print("Updating Adafruit IO...")
     except:
         print("An error occurred trying to upload data to Adafruit IO")

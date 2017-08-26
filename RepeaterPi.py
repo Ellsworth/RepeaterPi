@@ -175,7 +175,7 @@ if len(sys.argv) > 1:
 
     if sys.argv[1] == "--test":
         print("\n--- Start Report  ---")
-        print(sys.version)
+        print("Python: " + sys.version)
         print("PySerial: " + str(serial.__version__))
         print("--- End of Report ---")
 

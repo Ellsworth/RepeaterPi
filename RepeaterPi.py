@@ -31,6 +31,7 @@ except Exception:
 
 aio = Client(config['AdafruitIO']['AIO_Key'])
 repeater_location = config['Basic']['repeater_location']
+repeater_name = config['Basic']['repeater_name']
 main_cal = config['Basic']['main_cal']
 amplifier_cal = config['Basic']['amplifier_cal']
 serial_port = config['Basic']['serial_port']
@@ -55,7 +56,7 @@ x = 0
 startup = True
 sent_amp_alert_email = False
 
-print("RepeaterPi %sv by KG5KEY on %s" % (__version__,config['Basic']['repeater_name'],))
+print("RepeaterPi %sv by KG5KEY on %s" % (__version__,repeater_name))
 print("\nCopyright (C) 2017 Erich Ellsworth\nContact: erich.ellsworth@g.austincc.edu")
 
 # gets the data from the ADC and converts it to raw voltage
@@ -233,14 +234,14 @@ if __name__ == '__main__':
             outage_start = str(time.asctime(time.localtime(time.time())))
             outage = True
             sendMail(email_username, email_password, "There is an outage detected at the " +
-                config['Basic']['repeater_name'] + " repeater site that began at " + outage_start + ".\n" +
-                genTelemetry(), email_raw, "Possible outage detected at " + config['Basic']['repeater_name'])
+                repeater_name + " repeater site that began at " + outage_start + ".\n" +
+                genTelemetry(), email_raw, "Possible outage detected at " + repeater_name)
             y += 1
 
         if voltage[1] != 0 and outage:
             sendMail(email_username, email_password, "There was an outage for " + str(y) + " minutes at the " +
-                config['Basic']['repeater_name'] + " repeater site that began at " + outage_start + ".\n" +
-                genTelemetry(), email_raw, "Possible outage ended at " + config['Basic']['repeater_name'])
+                repeater_name + " repeater site that began at " + outage_start + ".\n" +
+                genTelemetry(), email_raw, "Possible outage ended at " + repeater_name)
             print("There was an outage for " + str(y) + " minutes.")
             outage = False
             y = 0

@@ -10,10 +10,6 @@ __version__ = "2.3"
 __author__ = "Erich Ellsworth"
 __contact__ = "erich.ellsworth@g.austincc.edu"
 
-# It's a good idea to add the following line to your crontab
-# 00 0 * * * systemctl restart RepeaterPi.service
-# This will restart the RepeaterPi service at night to help with timeouts.
-
 # reading config, don't ask please.
 
 if len(sys.argv) > 1:
@@ -29,6 +25,7 @@ except Exception:
     print("Could not read config.ini, it likely does not exist.")
     sys.exit(1)
 
+# Config stuff
 aio = Client(config['AdafruitIO']['AIO_Key'])
 repeater_location = config['Basic']['repeater_location']
 repeater_name = config['Basic']['repeater_name']
@@ -46,7 +43,6 @@ email_raw = email_raw.split()
 # Serial setup
 serialPort = serial.Serial()  # open serial port
 
-
 # average is 0, most recent 1, least recent 0
 serialdata = ""
 arduinoData = [0, 0, 0, 0] # temp, main, amp, 5v ref voltage
@@ -56,8 +52,12 @@ x = 0
 startup = True
 sent_amp_alert_email = False
 
-print("RepeaterPi %sv by KG5KEY on %s" % (__version__,repeater_name))
-print("\nCopyright (C) 2017 Erich Ellsworth\nContact: erich.ellsworth@g.austincc.edu")
+# Intro message
+print("RepeaterPi %sv by KG5KEY on %s\n" % (__version__,repeater_name))
+print("Copyright (C) 2017 Erich Ellsworth\n" +
+    "Contact: erich.ellsworth@g.austincc.edu")
+print("To view the copyright information, run RepeaterPi.py with the " +
+    "--copyright argument.")
 
 # gets the data from the ADC and converts it to raw voltage
 def getVoltage(channel):
@@ -89,7 +89,7 @@ def getPiTemp():
 
 
 def genTelemetry():
-    return ("-------------------------------------- \nTelemetry for " +
+    return("-------------------------------------- \nTelemetry for " +
             str(time.asctime(time.localtime(time.time()))) +
             "\nPrimary: " + str(voltage[0]) +
             "v Amplifier: " + str(voltage[1]) +
@@ -103,7 +103,7 @@ def updateAdafruit():
         aio.send(repeater_location + '-temp', tempHistory[0])
         aio.send(repeater_location + '-main-power', voltage[0])
         aio.send(repeater_location + '-amplifier-power', voltage[1])
-        
+
         aio.send(repeater_location + '-arduino-supply', arduinoData[3])
         aio.send(repeater_location + '-cpu-temp', getPiTemp())
         print("Updating Adafruit IO...")
@@ -184,11 +184,6 @@ if len(sys.argv) > 1:
         print("PySerial: " + str(serial.__version__))
         print("--- End of Report ---")
 
-    if sys.argv[1] == "--help":
-        print("\nProgram Arguments...")
-        print("--test      : dry run of the program, useful for CI testing.")
-        print("--copyright : prints copyright info")
-    print("Exiting!")
     sys.exit(0)
 
 
@@ -240,6 +235,7 @@ if __name__ == '__main__':
                 repeater_name + " repeater site that began at " + outage_start + ".\n" +
                 genTelemetry(), email_raw, "Possible outage detected at " + repeater_name)
             y += 1
+
 
         if voltage[1] != 0 and outage:
             sendMail(email_username, email_password, "There was an outage for " + str(y) + " minutes at the " +

@@ -50,8 +50,6 @@ sent_amp_alert_email = False
 print("RepeaterPi %sv by KG5KEY on %s\n" % (__version__,repeater_name))
 print("Copyright (C) 2017 Erich Ellsworth\n" +
     "Contact: erich.ellsworth@g.austincc.edu")
-print("To view the copyright information, run RepeaterPi.py with the " +
-    "--copyright argument.")
 
 # gets the data from the ADC and converts it to raw voltage
 def getVoltage(channel):
@@ -180,6 +178,9 @@ if len(sys.argv) > 1:
 
     sys.exit(0)
 
+print("To view the copyright information, run RepeaterPi.py with the " +
+    "--copyright argument.")
+
 
 serialPort.baudrate = 9600
 serialPort.port = serial_port
@@ -192,6 +193,7 @@ startup = True
 outage = False
 
 outage_start = ''
+
 
 print("Reading data from Arduino, this may take up to 60 seconds.")
 

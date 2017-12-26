@@ -11,19 +11,13 @@ __author__ = "Erich Ellsworth"
 __contact__ = "erich.ellsworth@g.austincc.edu"
 
 # reading config, don't ask please.
+config_file = 'config.ini'
 
-if len(sys.argv) > 1:
-    if sys.argv[1] == "--test":
+if len(sys.argv) > 1 and sys.argv[1] == "--test":
         config_file = 'config_example.ini'
-else:
-    config_file = '/root/RepeaterPi/config.ini'
 
 config = configparser.ConfigParser()
-try:
-    config.read(config_file)
-except Exception:
-    print("Could not read config.ini, it likely does not exist.")
-    sys.exit(1)
+config.read('config.ini')
 
 # Config stuff
 aio = Client(config['AdafruitIO']['AIO_Key'])

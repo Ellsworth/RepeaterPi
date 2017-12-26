@@ -17,7 +17,7 @@ if len(sys.argv) > 1 and sys.argv[1] == "--test":
         config_file = 'config_example.ini'
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read(config_file)
 
 # Config stuff
 aio = Client(config['AdafruitIO']['AIO_Key'])

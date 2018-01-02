@@ -6,7 +6,7 @@ import smtplib
 import serial
 import sys
 
-__version__ = "2.3"
+__version__ = "2.4"
 __author__ = "Erich Ellsworth"
 __contact__ = "erich.ellsworth@g.austincc.edu"
 
@@ -173,6 +173,7 @@ if len(sys.argv) > 1:
         print("\n--- Start Report  ---")
         print("Python: " + sys.version)
         print("PySerial: " + str(serial.__version__))
+        print("RepeaterPi: " + str(__version__))
         print("--- End of Report ---")
 
     sys.exit(0)

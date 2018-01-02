@@ -47,9 +47,9 @@ startup = True
 sent_amp_alert_email = False
 
 # Intro message
-print("RepeaterPi %sv by KG5KEY on %s\n" % (__version__,repeater_name))
+print("RepeaterPi %sv by KG5KEY on %s\n" % (__version__, repeater_name))
 print("Copyright (C) 2017 Erich Ellsworth\n" +
-    "Contact: ",__contact__)
+    "Contact: " + __contact__)
 
 # gets the data from the ADC and converts it to raw voltage
 def getVoltage(channel):

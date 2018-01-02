@@ -59,9 +59,8 @@ def getVoltage(channel):
 def scaleVoltage(channel):
     rv = (getVoltage(channel) * (61/11))
     if rv < 1:
-        return 0
-    else:
-        return rv
+        rv = 0
+    return rv
 
 
 # calculates temp

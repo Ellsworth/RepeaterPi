@@ -105,7 +105,6 @@ def updateAdafruit():
 
 def calibrateTemp(channel):
     temp = round(float(((((getVoltage(channel) * 1000) - 500) / 10) * 9 / 5 + 32)), 2)
-    updateAdafruit()
     return ([temp, temp, temp, temp, temp, temp])
 
 

@@ -96,7 +96,7 @@ def updateAdafruit():
         aio.send(repeater_location + '-main-power', voltage[0])
         aio.send(repeater_location + '-amplifier-power', voltage[1])
 
-        aio.send(repeater_location + '-arduino-supply', arduinoData[3])
+        aio.send(repeater_location + '-arduino-supply', (arduinoData[3] / 1000))
         aio.send(repeater_location + '-cpu-temp', getPiTemp())
         print("Updating Adafruit IO...")
     except:

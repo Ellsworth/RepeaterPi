@@ -204,6 +204,7 @@ voltage[0] = (round(float(scaleVoltage(1)) * float(main_cal), 2))
 voltage[1] = (round(float(scaleVoltage(2)) * float(amplifier_cal), 2))
 voltage[2] = voltage[0]
 voltage[3] = voltage[1]
+updateAdafruit()
 
 startup = False
 
@@ -212,7 +213,6 @@ if __name__ == '__main__':
 
     while True:
         arduinoData = getSerialData()
-
         tempAverage(calcTemp(0))
 
         voltage[0] = (round(float(scaleVoltage(1)) * float(main_cal), 2))

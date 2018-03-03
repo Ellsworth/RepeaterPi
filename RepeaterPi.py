@@ -11,7 +11,7 @@ __author__ = "Erich Ellsworth"
 __contact__ = "erich.ellsworth@g.austincc.edu"
 
 # reading config, don't ask please.
-config_file = 'config.ini'
+config_file = './config.ini'
 
 if len(sys.argv) > 1 and sys.argv[1] == "--test":
         config_file = 'config_example.ini'

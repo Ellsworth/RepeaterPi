@@ -199,10 +199,13 @@ outage_start = ''
 print("Reading data from Arduino, this may take up to 60 seconds.")
 
 arduinoData = getSerialData()
-
 tempHistory = calibrateTemp(0)
+
+voltage[0] = (round(float(scaleVoltage(1)) * float(main_cal), 2))
+voltage[1] = (round(float(scaleVoltage(2)) * float(amplifier_cal), 2))
 voltage[2] = voltage[0]
 voltage[3] = voltage[1]
+
 startup = False
 
 if __name__ == '__main__':

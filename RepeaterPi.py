@@ -1,4 +1,3 @@
-from Adafruit_IO import Client
 from subprocess import check_output
 import configparser
 import time
@@ -19,7 +18,6 @@ config = configparser.ConfigParser()
 config.read(config_file)
 
 # Config stuff
-aio = Client(config['AdafruitIO']['AIO_Key'])
 repeater_location = config['Basic']['repeater_location']
 repeater_name = config['Basic']['repeater_name']
 main_cal = config['Basic']['main_cal']
@@ -79,19 +77,6 @@ def genTelemetry():
             "v" + "\nTemperature: " + str(tempHistory[0]) +
             " Degrees Fahrenheit\nTemperature History: " + str(tempHistory))
 
-
-
-def updateAdafruit():
-    try:
-        aio.send(repeater_location + '-temp', tempHistory[0])
-        aio.send(repeater_location + '-main-power', voltage[0])
-        aio.send(repeater_location + '-amplifier-power', voltage[1])
-
-        aio.send(repeater_location + '-arduino-supply', (int(arduinoData[3]) / 1000))
-        aio.send(repeater_location + '-cpu-temp', getPiTemp())
-        print("Updating Adafruit IO...")
-    except:
-        print("An error occurred trying to upload data to Adafruit IO")
 
 
 def calibrateTemp(channel):
@@ -159,13 +144,8 @@ serialPort.port = serial_port
 serialPort.open()
 
 x = 0
-y = 0
 
 startup = True
-outage = False
-
-outage_start = ''
-
 
 print("Reading data from Arduino, this may take up to 60 seconds.")
 
@@ -176,8 +156,8 @@ voltage[0] = (round(float(scaleVoltage(1)) * float(main_cal), 2))
 voltage[1] = (round(float(scaleVoltage(2)) * float(amplifier_cal), 2))
 voltage[2] = voltage[0]
 voltage[3] = voltage[1]
-updateAdafruit()
 
+# Need to update the dashboard or else it won't on first loop.
 startup = False
 
 if __name__ == '__main__':
@@ -191,7 +171,7 @@ if __name__ == '__main__':
         voltage[1] = (round(float(scaleVoltage(2)) * float(amplifier_cal), 2))
 
         if abs(voltage[0] - voltage[2]) > .3 or abs(voltage[1] - voltage[3]) > .3 or x > 14:
-            updateAdafruit()
+            # Update dashboard
             voltage[2] = voltage[0]
             voltage[3] = voltage[1]
             x = 0

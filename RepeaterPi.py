@@ -2,7 +2,6 @@ from Adafruit_IO import Client
 from subprocess import check_output
 import configparser
 import time
-import smtplib
 import serial
 import sys
 
@@ -27,13 +26,6 @@ main_cal = config['Basic']['main_cal']
 amplifier_cal = config['Basic']['amplifier_cal']
 serial_port = config['Basic']['serial_port']
 
-# email config
-email_username = config['Email']['username']
-email_password = config['Email']['password']
-email_list = config['Email']['email_list']
-email_raw = config['Email']['email_raw']
-email_raw = email_raw.split()
-
 # Serial setup
 serialPort = serial.Serial()  # open serial port
 
@@ -44,7 +36,6 @@ tempHistory = [0, 0, 0, 0, 0, 0]
 voltage = [0, 0, 0, 0]
 x = 0
 startup = True
-sent_amp_alert_email = False
 
 # Intro message
 print("RepeaterPi %sv by KG5KEY on %s\n" % (__version__, repeater_name))
@@ -137,25 +128,6 @@ def tempAverage(var):
     return tempHistory
 
 
-def sendMail(user, password, msg, recipient, subject):
-    try:
-        server = smtplib.SMTP('smtp.gmail.com:587')
-        msg = 'Subject: %s\n\n%s' % (subject, msg)
-        server.ehlo()
-        server.starttls()
-        server.login(user, password)
-        server.sendmail(user, recipient, msg)
-        smtplib.SMTP()
-    except:
-        print("Error sending the email. Possible internet outage detected...")
-
-
-def formatEmail(message):
-    return "From: RepeaterPi <" + email_username + ">\n" \
-            "Subject: RepeaterPi Alert @ " + repeater_location + "\n" \
-            "To: " + str(email_list) + "\n" \
-            + message
-
 if len(sys.argv) > 1:
     if sys.argv[1] == "--copyright":
         print("\nThis program is free software: you can redistribute it and/or modify\n" +
@@ -225,25 +197,6 @@ if __name__ == '__main__':
             x = 0
         else:
             x += 1
-
-        if voltage[1] == 0 and outage == False:
-            print("Warning, Possible outage detected.")
-            outage_start = str(time.asctime(time.localtime(time.time())))
-            outage = True
-            sendMail(email_username, email_password, "There is an outage detected at the " +
-                repeater_name + " repeater site that began at " + outage_start + ".\n" +
-                genTelemetry(), email_raw, "Possible outage detected at " + repeater_name)
-            y += 1
-
-
-        if voltage[1] != 0 and outage:
-            sendMail(email_username, email_password, "There was an outage for " + str(y) + " minutes at the " +
-                repeater_name + " repeater site that began at " + outage_start + ".\n" +
-                genTelemetry(), email_raw, "Possible outage ended at " + repeater_name)
-            print("There was an outage for " + str(y) + " minutes.")
-            outage = False
-            y = 0
-
 
         print(genTelemetry())
         time.sleep(60)

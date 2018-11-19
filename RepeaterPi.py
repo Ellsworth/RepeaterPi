@@ -1,10 +1,11 @@
+from influxdb import InfluxDBClient
 from subprocess import check_output
 import configparser
 import time
 import serial
 import sys
 
-__version__ = "2.4"
+__version__ = "2.5"
 __author__ = "Erich Ellsworth"
 __contact__ = "erich.ellsworth@g.austincc.edu"
 
@@ -24,12 +25,22 @@ main_cal = config['Basic']['main_cal']
 amplifier_cal = config['Basic']['amplifier_cal']
 serial_port = config['Basic']['serial_port']
 
+# InfluxDB Login
+hostname = config['Grafana']['hostname']
+port = config['Grafana']['port']
+username = config['Grafana']['username']
+password = config['Grafana']['password']
+database = config['Grafana']['database']
+
+# Setup InfluxDB client
+client = InfluxDBClient(hostname, port, username, password, hostname)
+
 # Serial setup
 serialPort = serial.Serial()  # open serial port
 
 # average is 0, most recent 1, least recent 0
 serialdata = ""
-arduinoData = [0, 0, 0, 0] # temp, main, amp, 5v ref voltage
+arduinoData = [0, 0, 0, 0, 0, 0] # 0 temp, 1 main, 2 amp, 3 5v ref, 4 fwd pwr, 5 rev pwr,
 tempHistory = [0, 0, 0, 0, 0, 0]
 voltage = [0, 0, 0, 0]
 x = 0
@@ -58,7 +69,7 @@ def calcTemp(channel):
     temp = round(float(((((getVoltage(channel) * 1000) - 500) / 10) * 9 / 5 + 32)), 2)
     if abs(temp - tempHistory[0]) > 4:
         temp = tempHistory[0]
-    return temp
+    return float(temp)
 
 
 def getPiTemp():
@@ -94,14 +105,6 @@ def getSerialData():
     return(serialdata.split(","))
 
 
-def updateSensors():
-    arduinoData = getSerialData()
-    tempAverage(calcTemp(0))
-
-    voltage[0] = (round(float(scaleVoltage(1)) * float(main_cal), 2))
-    voltage[1] = (round(float(scaleVoltage(2)) * float(amplifier_cal), 2))
-
-
 def tempAverage(var):
     tempHistory[5] = tempHistory[4]
     tempHistory[4] = tempHistory[3]
@@ -111,6 +114,28 @@ def tempAverage(var):
     tempHistory[0] = round((tempHistory[1] + tempHistory[2] +
         tempHistory[3] + tempHistory[4] + tempHistory[5]) / 5, 2)
     return tempHistory
+
+def updateDashboard():
+    json_body = [
+        {
+            "measurement": "georgetown",
+            "tags": {
+                "use": "null",
+            },
+            "fields": {
+                "temp": calcTemp(0),
+                "temp_pi": float(getPiTemp()),
+                "v_main": scaleVoltage(1),
+                "v_amp": scaleVoltage(2),
+                "arduino": arduinoData[3],
+                "pwr_fwd": voltage[0],
+                "pwr_rev": voltage[1],
+            }
+        }
+    ]
+
+
+    client.write_points(json_body)
 
 
 if len(sys.argv) > 1:
@@ -157,7 +182,7 @@ voltage[1] = (round(float(scaleVoltage(2)) * float(amplifier_cal), 2))
 voltage[2] = voltage[0]
 voltage[3] = voltage[1]
 
-# Need to update the dashboard or else it won't on first loop.
+updateDashboard()
 startup = False
 
 if __name__ == '__main__':
@@ -170,8 +195,9 @@ if __name__ == '__main__':
         voltage[0] = (round(float(scaleVoltage(1)) * float(main_cal), 2))
         voltage[1] = (round(float(scaleVoltage(2)) * float(amplifier_cal), 2))
 
+
         if abs(voltage[0] - voltage[2]) > .3 or abs(voltage[1] - voltage[3]) > .3 or x > 14:
-            # Update dashboard
+            updateDashboard()
             voltage[2] = voltage[0]
             voltage[3] = voltage[1]
             x = 0

@@ -1,3 +1,4 @@
 configparser
 pyserial
 Adafruit_IO
+influxdb

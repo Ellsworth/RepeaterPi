@@ -1,4 +1,6 @@
 int tempPin = 1;
+int fwdPin = 4;
+int revPin = 5;
 int mainPin = 6;
 int ampPin = 7;
 
@@ -33,6 +35,10 @@ void loop()
   Serial.print(",");
   Serial.print(analogRead(ampPin));
   Serial.print(",");
+  Serial.print(analogRead(fwdPin));
+  Serial.print(",");
+  Serial.print(analogRead(revPin));
+  Serial.print(",");
   Serial.println(readVcc(), DEC );
-  delay(55000);
+  delay(15100);
 }

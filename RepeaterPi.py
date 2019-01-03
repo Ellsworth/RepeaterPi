@@ -13,7 +13,9 @@ __contact__ = "erich.ellsworth@g.austincc.edu"
 config_file = './config.ini'
 
 if len(sys.argv) > 1 and sys.argv[1] == "--test":
-        config_file = 'config_example.ini'
+        config_file = './config_example.ini'
+
+print(sys.argv)
 
 config = configparser.ConfigParser()
 config.read(config_file)
@@ -70,8 +72,8 @@ def scaleWattage(channel):
 # calculates temp
 def calcTemp(channel):
     temp = round(float(((((getVoltage(channel) * 1000) - 500) / 10) * 9 / 5 + 32)), 2)
-    #if abs(temp - tempHistory[0]) > 4:
-    #    temp = tempHistory[0]
+    if abs(temp - tempHistory[0]) > 4:
+        temp = tempHistory[0]
     return float(temp)
 
 
@@ -84,14 +86,6 @@ def getPiTemp():
 
 
 def genTelemetry():
-    """
-    return("-------------------------------------- \nTelemetry for " +
-            str(time.asctime(time.localtime(time.time()))) +
-            "\nPrimary: " + str(voltage[0]) +
-            "v Amplifier: " + str(voltage[1]) +
-            "v" + "\nTemperature: " + str(tempHistory[0]) +
-            " Degrees Fahrenheit\nTemperature History: " + str(tempHistory))
-    """
     print("--------------------------------------")
     print("Telemetry for " + str(time.asctime(time.localtime(time.time()))))
     print("Temperature: " + str(tempHistory[0])) #+ " Pi Temp: " + str(getPiTemp()))
@@ -149,18 +143,18 @@ def updateDashboard():
     client.write_points(json_body)
 
 
-if len(sys.argv) > 1 and sys.argv[1] == "--copyright":
-    print("\nThis program is free software: you can redistribute it and/or modify\n" +
-        "it under the terms of the GNU General Public License as published by\n" +
-        "the Free Software Foundation, either version 3 of the License, or\n" +
-        "(at your option) any later version.\n\n" +
-        "This program is distributed in the hope that it will be useful,\n" +
-        "but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
-        "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
-        "GNU General Public License for more details.\n\n" +
-        "You should have received a copy of the GNU General Public License\n" +
-        "along with this program. If not, see <http://www.gnu.org/licenses/>.")
-
+if len(sys.argv) > 1:
+    if sys.argv[1] == "--copyright":
+        print("\nThis program is free software: you can redistribute it and/or modify\n" +
+            "it under the terms of the GNU General Public License as published by\n" +
+            "the Free Software Foundation, either version 3 of the License, or\n" +
+            "(at your option) any later version.\n\n" +
+            "This program is distributed in the hope that it will be useful,\n" +
+            "but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
+            "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
+            "GNU General Public License for more details.\n\n" +
+            "You should have received a copy of the GNU General Public License\n" +
+            "along with this program. If not, see <http://www.gnu.org/licenses/>.")
     if sys.argv[1] == "--test":
         print("\n--- Start Report  ---")
         print("Python: " + sys.version)

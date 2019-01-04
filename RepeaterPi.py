@@ -128,7 +128,7 @@ def updateDashboard():
             },
             "fields": {
                 "temp": calcTemp(0),
-                "temp_pi": 42.2,# float(getPiTemp()),
+                "temp_pi": float(getPiTemp()),
                 "v_main": voltage[0],
                 "v_amp": voltage[1],
                 "arduino": str(float(arduinoData[5]) * .001),

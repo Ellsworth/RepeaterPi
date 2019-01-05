@@ -108,8 +108,6 @@ def getSerialData():
         serialdata = serialdata.replace(char,'')
     return(serialdata.split(","))
 
-    arduinoData[5] = arduinoData[5] * .001
-
 
 def tempAverage(var):
     tempHistory[5] = tempHistory[4]

@@ -108,7 +108,7 @@ def getSerialData():
         serialdata = serialdata.replace(char,'')
     return(serialdata.split(","))
 
-    arduinoData[5] = round((arduinoData[5] * .001), 2)
+    arduinoData[5] = arduinoData[5] * .001
 
 
 def tempAverage(var):

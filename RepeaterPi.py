@@ -128,7 +128,7 @@ def updateDashboard():
             },
             "fields": {
                 "temp": calcTemp(0),
-                "temp_pi": 42.0,#float(getPiTemp()),
+                "temp_pi": float(getPiTemp()),
                 "v_main": voltage[0],
                 "v_amp": voltage[1],
                 "arduino": round(str(float(arduinoData[5]) * .001), 2),
@@ -192,6 +192,7 @@ if __name__ == '__main__':
     voltage[3] = voltage[1]
     pwr_fwd = (scaleWattage(3) * float(fwd_pwr_cal))
     pwr_rev = (scaleWattage(4) * float(rev_pwr_cal))
+    updateDashboard()
 
     startup = False
 

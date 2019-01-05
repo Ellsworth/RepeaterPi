@@ -131,7 +131,7 @@ def updateDashboard():
                 "temp_pi": float(getPiTemp()),
                 "v_main": voltage[0],
                 "v_amp": voltage[1],
-                "arduino": round(str(float(arduinoData[5]) * .001), 2),
+                "arduino": str(round(float(arduinoData[5]) * .001), 2),
                 "pwr_fwd": pwr_fwd,
                 "pwr_rev": pwr_rev,
             }

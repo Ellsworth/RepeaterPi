@@ -108,6 +108,8 @@ def getSerialData():
         serialdata = serialdata.replace(char,'')
     return(serialdata.split(","))
 
+    arduinoData[5] = round((arduinoData[5] * .001), 2)
+
 
 def tempAverage(var):
     tempHistory[5] = tempHistory[4]
@@ -131,7 +133,7 @@ def updateDashboard():
                 "temp_pi": float(getPiTemp()),
                 "v_main": voltage[0],
                 "v_amp": voltage[1],
-                "arduino": str(round(float(arduinoData[5]) * .001), 2),
+                "arduino": str(arduinoData[5]),
                 "pwr_fwd": pwr_fwd,
                 "pwr_rev": pwr_rev,
             }

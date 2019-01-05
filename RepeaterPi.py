@@ -91,7 +91,9 @@ def genTelemetry():
     print("Temperature: " + str(tempHistory[0]) + " Pi Temp: " + str(getPiTemp()))
     print("Primary: " + str(voltage[0]) + "v Amplifier: " + str(voltage[1]) + "v")
     print("fwd " + str(pwr_fwd) +  " rev " + str(pwr_rev))
+    print("Arduino Data: " + str(arduinoData))
     print("x = " + str(x))
+
 
 
 def calibrateTemp(channel):

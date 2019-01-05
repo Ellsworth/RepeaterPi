@@ -9,8 +9,8 @@ __version__ = "2.5"
 __author__ = "Erich Ellsworth"
 __contact__ = "erich.ellsworth@g.austincc.edu"
 
-# reading config, don't ask please.
-config_file = './config.ini'
+# Need to tell where to find the cfg if running from systemd
+config_file = '/root/RepeaterPi/config.ini'
 
 if len(sys.argv) > 1 and sys.argv[1] == "--test":
         config_file = './config_example.ini'
@@ -88,7 +88,7 @@ def getPiTemp():
 def genTelemetry():
     print("--------------------------------------")
     print("Telemetry for " + str(time.asctime(time.localtime(time.time()))))
-    print("Temperature: " + str(tempHistory[0])) #+ " Pi Temp: " + str(getPiTemp()))
+    print("Temperature: " + str(tempHistory[0]) + " Pi Temp: " + str(getPiTemp()))
     print("Primary: " + str(voltage[0]) + "v Amplifier: " + str(voltage[1]) + "v")
     print("fwd " + str(pwr_fwd) +  " rev " + str(pwr_rev))
     print("x = " + str(x))
@@ -128,10 +128,10 @@ def updateDashboard():
             },
             "fields": {
                 "temp": calcTemp(0),
-                "temp_pi": float(getPiTemp()),
+                "temp_pi": 42.0,#float(getPiTemp()),
                 "v_main": voltage[0],
                 "v_amp": voltage[1],
-                "arduino": str(float(arduinoData[5]) * .001),
+                "arduino": round(str(float(arduinoData[5]) * .001), 2),
                 "pwr_fwd": pwr_fwd,
                 "pwr_rev": pwr_rev,
             }
@@ -141,6 +141,7 @@ def updateDashboard():
 
 
     client.write_points(json_body)
+    print("Done sending data.")
 
 
 if len(sys.argv) > 1:
@@ -192,7 +193,6 @@ if __name__ == '__main__':
     pwr_fwd = (scaleWattage(3) * float(fwd_pwr_cal))
     pwr_rev = (scaleWattage(4) * float(rev_pwr_cal))
 
-    updateDashboard()
     startup = False
 
     while True:
@@ -206,8 +206,7 @@ if __name__ == '__main__':
 
         genTelemetry()
 
-        #if abs(voltage[0] - voltage[2]) > .3 or abs(voltage[1] - voltage[3]) > .3 or x > 60 or pwr_fwd > 5:
-        if x > 60 or pwr_fwd > 5:
+        if abs(voltage[0] - voltage[2]) > .3 or abs(voltage[1] - voltage[3]) > .3 or x > 60 or pwr_fwd > 5:
 
             updateDashboard()
             voltage[2] = voltage[0]

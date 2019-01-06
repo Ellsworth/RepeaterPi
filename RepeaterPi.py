@@ -15,8 +15,6 @@ config_file = '/root/RepeaterPi/config.ini'
 if len(sys.argv) > 1 and sys.argv[1] == "--test":
         config_file = './config_example.ini'
 
-print(sys.argv)
-
 config = configparser.ConfigParser()
 config.read(config_file)
 
@@ -133,7 +131,8 @@ def updateDashboard():
                 "temp_pi": float(getPiTemp()),
                 "v_main": voltage[0],
                 "v_amp": voltage[1],
-                "arduino": str(round(float(arduinoData[5]) * 0.001, 3)),
+              # "arduino": str(round(float(arduinoData[5]) * 0.001, 3)),
+                "arduino": '%.3f' % round(float(arduinoData[5], 3)),
                 "pwr_fwd": pwr_fwd,
                 "pwr_rev": pwr_rev,
             }
@@ -163,6 +162,7 @@ if len(sys.argv) > 1:
         print("Python: " + sys.version)
         print("PySerial: " + str(serial.__version__))
         print("RepeaterPi: " + str(__version__))
+        print("argv: " + str(sys.argv))
         print("--- End of Report ---")
 
     sys.exit(0)

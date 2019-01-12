@@ -131,8 +131,7 @@ def updateDashboard():
                 "temp_pi": float(getPiTemp()),
                 "v_main": voltage[0],
                 "v_amp": voltage[1],
-              # "arduino": str(round(float(arduinoData[5]) * 0.001, 3)),
-                "arduino": '%.4s' % str(float(arduinoData[5]) * float(.001)),
+                "arduino": '%.5s' % str(float(arduinoData[5]) * float(.001)),
                 "pwr_fwd": pwr_fwd,
                 "pwr_rev": pwr_rev,
             }
@@ -207,9 +206,14 @@ if __name__ == '__main__':
         pwr_fwd = (scaleWattage(3) * float(fwd_pwr_cal))
         pwr_rev = (scaleWattage(4) * float(rev_pwr_cal))
 
+        if pwr_fwd > 1:
+            tx = True
+        else:
+            tx = False
+
         genTelemetry()
 
-        if abs(voltage[0] - voltage[2]) > .3 or abs(voltage[1] - voltage[3]) > .3 or x > 60 or pwr_fwd > 5:
+        if abs(voltage[0] - voltage[2]) > .3 or abs(voltage[1] - voltage[3]) > .3 or x > 59 or tx or (tx == False and pwr_fwd < 1):
 
             updateDashboard()
             voltage[2] = voltage[0]

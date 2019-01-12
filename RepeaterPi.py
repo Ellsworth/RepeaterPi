@@ -213,7 +213,7 @@ if __name__ == '__main__':
 
         genTelemetry()
 
-        if abs(voltage[0] - voltage[2]) > .3 or abs(voltage[1] - voltage[3]) > .3 or x > 59 or tx or (tx == False and pwr_fwd < 1):
+        if abs(voltage[0] - voltage[2]) > .3 or abs(voltage[1] - voltage[3]) > .3 or x > 59 or tx or (tx == True and pwr_fwd < 1):
 
             updateDashboard()
             voltage[2] = voltage[0]

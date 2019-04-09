@@ -90,7 +90,7 @@ def genTelemetry():
     print("Primary: " + str(voltage[0]) + "v Amplifier: " + str(voltage[1]) + "v")
     print("fwd " + str(pwr_fwd) +  " rev " + str(pwr_rev))
     print("Arduino Data: " + str(arduinoData))
-    print("x = " + str(x) + "tx: " + str(tx))
+    print("x = " + str(x) + " tx: " + str(tx))
 
 
 

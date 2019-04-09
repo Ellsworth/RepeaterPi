@@ -205,7 +205,7 @@ if __name__ == '__main__':
         pwr_fwd = (scaleWattage(3) * float(fwd_pwr_cal))
         pwr_rev = (scaleWattage(4) * float(rev_pwr_cal))
 
-        pwr_fwd > 1: = tx
+        tx = pwr_fwd > 1
 
         genTelemetry()
 

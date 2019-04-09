@@ -90,7 +90,7 @@ def genTelemetry():
     print("Primary: " + str(voltage[0]) + "v Amplifier: " + str(voltage[1]) + "v")
     print("fwd " + str(pwr_fwd) +  " rev " + str(pwr_rev))
     print("Arduino Data: " + str(arduinoData))
-    print("x = " + str(x))
+    print("x = " + str(x) + "tx: " + str(tx)
 
 
 
@@ -205,10 +205,7 @@ if __name__ == '__main__':
         pwr_fwd = (scaleWattage(3) * float(fwd_pwr_cal))
         pwr_rev = (scaleWattage(4) * float(rev_pwr_cal))
 
-        if pwr_fwd > 1:
-            tx = True
-        else:
-            tx = False
+        pwr_fwd > 1: = tx
 
         genTelemetry()
 

@@ -131,14 +131,13 @@ def updateDashboard():
                 "temp_pi": float(getPiTemp()),
                 "v_main": voltage[0],
                 "v_amp": voltage[1],
-                "arduino": '%.5s' % str(float(arduinoData[5]) * float(.001)),
+                "arduino": float('%.5s' % str(float(arduinoData[5]) * float(.001))),
                 "pwr_fwd": pwr_fwd,
                 "pwr_rev": pwr_rev,
             }
         }
     ]
     print("Sending data to " + hostname)
-
 
     client.write_points(json_body)
     print("Done sending data.")

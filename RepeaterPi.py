@@ -205,8 +205,8 @@ if __name__ == '__main__':
         pwr_fwd = (scaleWattage(3) * float(fwd_pwr_cal))
         pwr_rev = (scaleWattage(4) * float(rev_pwr_cal))
 
-
-        if abs(voltage[0] - voltage[2]) > .3 or abs(voltage[1] - voltage[3]) > .3 or x > 59 or tx or (tx == True and pwr_fwd < 1):
+        genTelemetry()
+        if abs(voltage[0] - voltage[2]) > .3 or abs(voltage[1] - voltage[3]) > .3 or x > 59 or tx or pwr_fwd > 1:
 
             updateDashboard()
             voltage[2] = voltage[0]
@@ -216,6 +216,4 @@ if __name__ == '__main__':
             x += 1
 
         tx = pwr_fwd > 1
-        genTelemetry()
-
         time.sleep(15)

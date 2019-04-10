@@ -5,7 +5,7 @@ import time
 import serial
 import sys
 
-__version__ = "2.5"
+__version__ = "2.6"
 __author__ = "Erich Ellsworth"
 __contact__ = "erich.ellsworth@g.austincc.edu"
 

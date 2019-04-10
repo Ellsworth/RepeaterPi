@@ -46,6 +46,7 @@ arduinoData = [0, 0, 0, 0, 0, 0] # 0 temp, 1 main, 2 amp, 3 fwd, 4 rev, 5 5v ref
 tempHistory = [0, 0, 0, 0, 0, 0]
 voltage = [0, 0, 0, 0]
 x = 0
+tx = True
 startup = True
 
 # Intro message

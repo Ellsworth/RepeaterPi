@@ -5,6 +5,12 @@ when a argument is tripped
 - [Link to source code](https://github.com/Ellsworth/repeaterpi)
 
 ----------
+## Software Arguments
+- The following arguments may be added to modify the software's behavior.
+
+  - `--copyright` will print out the legal notice for using this software.
+  - `--test` will run the software in a 'dry run' mode for the purpose of continuous integration.
+----------
 
 ## The sensor board
 - The sensor board is a small Arduino based device that has two voltage probes and

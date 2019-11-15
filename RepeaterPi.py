@@ -22,7 +22,7 @@ config.read(config_file)
 repeater_location = config['Basic']['repeater_location']
 repeater_name = config['Basic']['repeater_name']
 serial_port = config['Basic']['serial_port']
-poll_time_sec = config['Basic']['poll_time_sec']
+poll_time_sec = int(config['Basic']['poll_time_sec'])
 
 main_cal = config['calibration']['main_cal']
 amplifier_cal = config['calibration']['amplifier_cal']
@@ -212,7 +212,7 @@ if __name__ == '__main__':
         pwr_rev = (scaleWattage(4) * float(rev_pwr_cal))
 
         genTelemetry()
-        if abs(voltage[0] - voltage[2]) > .3 or abs(voltage[1] - voltage[3]) > .3 or x > ((900 / int(poll_time_sec)) - 1) or tx or pwr_fwd > 1:
+        if abs(voltage[0] - voltage[2]) > .3 or abs(voltage[1] - voltage[3]) > .3 or x > ((900 / poll_time_sec) - 1) or tx or pwr_fwd > 1:
 
             updateDashboard()
             voltage[2] = voltage[0]

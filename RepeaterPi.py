@@ -212,7 +212,7 @@ if __name__ == '__main__':
         pwr_rev = (scaleWattage(4) * float(rev_pwr_cal))
 
         genTelemetry()
-        if abs(voltage[0] - voltage[2]) > .3 or abs(voltage[1] - voltage[3]) > .3 or x > ((900 / poll_time_sec) - 1) or tx or pwr_fwd > 1:
+        if abs(voltage[0] - voltage[2]) > .3 or abs(voltage[1] - voltage[3]) > .3 or x > ((900 / int(poll_time_sec)) - 1) or tx or pwr_fwd > 1:
 
             updateDashboard()
             voltage[2] = voltage[0]

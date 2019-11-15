@@ -21,11 +21,16 @@ config.read(config_file)
 # Config stuff
 repeater_location = config['Basic']['repeater_location']
 repeater_name = config['Basic']['repeater_name']
+serial_port = config['Basic']['serial_port']
+poll_time_sec = config['Basic']['poll_time_sec']
+
 main_cal = config['calibration']['main_cal']
 amplifier_cal = config['calibration']['amplifier_cal']
 fwd_pwr_cal = config['calibration']['pwr_fwd']
 rev_pwr_cal = config['calibration']['pwr_rev']
-serial_port = config['Basic']['serial_port']
+
+
+
 
 # InfluxDB Login
 hostname = config['Grafana']['hostname']
@@ -207,7 +212,7 @@ if __name__ == '__main__':
         pwr_rev = (scaleWattage(4) * float(rev_pwr_cal))
 
         genTelemetry()
-        if abs(voltage[0] - voltage[2]) > .3 or abs(voltage[1] - voltage[3]) > .3 or x > 59 or tx or pwr_fwd > 1:
+        if abs(voltage[0] - voltage[2]) > .3 or abs(voltage[1] - voltage[3]) > .3 or x > ((900 / poll_time_sec) - 1) or tx or pwr_fwd > 1:
 
             updateDashboard()
             voltage[2] = voltage[0]
@@ -217,4 +222,4 @@ if __name__ == '__main__':
             x += 1
 
         tx = pwr_fwd > 1
-        time.sleep(15)
+        time.sleep(poll_time_sec)
